@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form id="add-tweet-form" onsubmit="return add_tweet();">
+        <label for="new-tweet">Add Tweet</label>
+        <input id="new-tweet" name="new-tweet" type="text"/>
+        <input type="submit" value="Submit"/>
+    </form>
+{% endblock %}
