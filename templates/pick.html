@@ -1,9 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <form id="add-tweet-form" onsubmit="return add_tweet();">
-        <label for="new-tweet">Add Tweet</label>
-        <input id="new-tweet" name="new-tweet" type="text"/>
-        <input type="submit" value="Submit"/>
+<div class="p-5">
+    <h2 class="text-center">CURATE TWEETS</h2>
+    <form onsubmit="search_tweets();return false;" class="row">
+        <input class="form-control my-3 col-4 offset-4" id="term" type="text" placeholder="Search Term" value="#spotify" />
     </form>
+    <div class="row">
+        <div class="col-6">
+            <h4>Search Result</h4>
+            <div class="search-tweets row" style="height: 70vh;overflow:auto"></div>
+        </div>
+        <div class="col-6">
+            <h4>Selected Tweets</h4>
+            <div class="selected-tweets row" style="height: 70vh; overflow:auto"></div>
+        </div>
+    </div>
+</div>
+<script src="/static/pick.js?random={{random()}}"></script>
 {% endblock %}

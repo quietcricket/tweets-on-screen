@@ -1,0 +1,11 @@
+body {
+    background: url(/static/images/bg.png);
+    background-size: 150px 150px;
+}
+.container {
+    max-width: 1200px;
+}
+
+.CallToAction{
+    display:none!important;
+}
