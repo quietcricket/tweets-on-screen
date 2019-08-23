@@ -75,7 +75,7 @@ function synch_selected() {
     });
 }
 
-setInterval(search_tweets, 10000);
+setInterval(search_tweets, 15000);
 setInterval(synch_selected, 5000);
 setTimeout(synch_selected, 500);
 setTimeout(search_tweets, 1000);

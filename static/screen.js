@@ -81,7 +81,7 @@ window.addEventListener('resize', function () {
 
 $('#bg-video').css('width', $(window).width());
 setInterval(fetch_tweets, 2000);
-setInterval(fetch_tweets, 100);
+setTimeout(fetch_tweets, 500);
 setTimeout(function () {
     slideIn(0)
 }, 3000);
