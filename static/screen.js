@@ -1,14 +1,21 @@
-var tweets = [];
+const ROWS = 2;
+const COLS = 2;
+const MARGIN = 20;
+const WIDTH = `calc(${100/COLS}% - ${MARGIN*(COLS-1)/COLS}px)`;
+
+var tweet_ids = [];
 var currIndex = 0;
 
 function show_tweet(tid) {
     var ele = document.createElement("div");
     ele.id = "selected-" + tid;
-    ele.classList.add("tweet");
+    ele.style.opacity = 0;
+    ele.style.position = 'absolute';
+    ele.style.width = WIDTH
+    ele.classList.add('tweet');
+
     $('.selected-tweets').prepend(ele);
-    twttr.widgets.createTweet(tid, ele, {
-        conversation: 'none'
-    }).then(dom => {
+    twttr.widgets.createTweet(tid, ele, {}).then(dom => {
         var shadow = dom.shadowRoot.children[1];
         shadow.querySelector('.EmbeddedTweet').style.backgroundColor = "rgba(255,255,255,0.8)"
     });
@@ -16,24 +23,37 @@ function show_tweet(tid) {
 
 function slideIn(index) {
     var tweets = document.querySelectorAll('.tweet');
-    var n = tweets.length;
-    var arr = [tweets[index % n], tweets[(index + 1) % n], tweets[(index + 2) % n]];
     var wh = $(window).height();
-    var ww = $(window).width();
-    for (var i = 0; i < arr.length; i++) {
-        var t = arr[i];
-        t.style.left = ww * 0.3 * i + ww * 0.025 * (i + 1)
-        t.style.top = (wh - t.offsetHeight) / 2 + 'px';
-        t.style.marginTop = '20px';
-        t.setAttribute('in', 1);
-        $(t).delay(200 * (i + 1)).animate({
-            marginTop: 0,
-            opacity: 1
-        }, {
-            duration: 400,
-        });
+    var col_tops = [];
+    for (var c = 0; c < COLS; c++) {
+        var total_height = 0;
+        for (var r = 0; r < ROWS; r++) {
+            var n = c + r * COLS;
+            var t = tweets[(index + n) % tweets.length];
+            total_height += t.offsetHeight;
+        }
+        col_tops.push((wh - total_height) / 2);
     }
-    currIndex = index + 3;
+    for (var r = 0; r < ROWS; r++) {
+        for (var c = 0; c < COLS; c++) {
+            var n = c + r * COLS;
+            var t = tweets[(index + n) % tweets.length];
+            t.style.left = `calc(${100/COLS*c}% + ${MARGIN*(COLS-1)/COLS*(c+1)}px)`
+            t.style.top = col_tops[c] + 'px';
+            t.style.marginTop = '-20px';
+            t.style.opacity = 0;
+            col_tops[c] += t.offsetHeight;
+            t.setAttribute('in', 1);
+            $(t).delay(200 * (n + 1)).animate({
+                marginTop: 0,
+                opacity: 1
+            }, {
+                duration: 400,
+            });
+        }
+    }
+
+    currIndex += ROWS * COLS;
 }
 
 function slideOut() {
@@ -53,40 +73,41 @@ function slideOut() {
 
 function fetch_tweets() {
     $.get('/selected-tweets', function (data) {
-        var new_tweets = data.split(",");
+        var new_ids = data.split(",");
         var has_new = false;
-        for (var t of new_tweets) {
-            if (tweets.indexOf(t) > -1) {
+        for (var t of new_ids) {
+            if (tweet_ids.indexOf(t) > -1) {
                 continue;
             }
             has_new = true;
             show_tweet(t);
         }
-
-        for (var t of tweets) {
-            if (new_tweets.indexOf(t) == -1) {
+        for (var t of tweet_ids) {
+            if (new_ids.indexOf(t) == -1) {
                 $('#selected-' + t).detach();
             }
         }
-        tweets = new_tweets;
+        tweet_ids = new_ids;
         if (has_new) {
-            currIndex = 0;
+            setTimeout(slideIn, 2000, 0);
         }
     });
 }
 window.addEventListener('resize', function () {
-    var vid = $('#bg-video');
-    $(vid).css('width', $(window).width());
+
 });
 
-$('#bg-video').css('width', $(window).width());
-setInterval(fetch_tweets, 2000);
-setTimeout(fetch_tweets, 500);
-setTimeout(function () {
-    slideIn(0)
-}, 3000);
+function waitWidget() {
+    if (twttr.hasOwnProperty('widgets')) {
+        fetch_tweets()
+    } else {
+        setTimeout(waitWidget, 100);
+    }
+}
 
 setInterval(function () {
     slideOut();
     slideIn(currIndex);
 }, 8000);
+
+waitWidget();

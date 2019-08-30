@@ -59,13 +59,13 @@ def remove_tweet(tid):
     return 'ok'
 
 
-@flapp.route('/pick', )
+@flapp.route('/pick')
 def pick_tweets():
     load_selected_tweets()
     return render_template('pick.html')
 
 
-@flapp.route('/screen')
+@flapp.route('/')
 def screen():
     return render_template('screen.html')
 

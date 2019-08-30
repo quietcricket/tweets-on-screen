@@ -28,8 +28,8 @@ function show_tweet(tid, mode = 'search') {
         var color = mode == 'search' ? 'rgb(43,123,185)' : '#dc3545';
         var func = mode == 'search' ? 'add_tweet' : 'remove_tweet';
         var text = mode == 'search' ? 'Feature Tweet' : 'Remove Tweet';
-        var styles = `display:inline-block;margin:15px 0 15px 0;font-size:1.2em;padding:5px 15px;background:${color};border-radius:5px;color:white;`;
-        $(shadow).append(`<div style="text-align:center"><a href="javascript:void(0)" style="${styles}" onclick="${func}(\'${tid}\')">${text}</a></div>`);
+        var styles = `display:inline-block;margin:15px 0 15px 0;font-size:1.2em;padding:5px 15px;background:${color};border-radius:5px;color:white;cursor:pointer`;
+        $(shadow).append(`<div style="text-align:center"><a style="${styles}" onclick="${func}(\'${tid}\')">${text}</a></div>`);
     });
 
 }

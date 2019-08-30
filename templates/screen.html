@@ -1,13 +1,5 @@
 {% extends "base.html" %}
 {%block content %}
-<style>
-    .tweet {
-        width: 30vw;
-        opacity: 0;
-        position: absolute;
-    }
-</style>
-<div class="selected-tweets" style="position: relative;z-index:2; pointer-events: none;"></div>
-<video src="/static/bg.mp4" id="bg-video" loop onclick="this.play();this.volume=0;" style="position: fixed;top:0;left:0;" />
+<div class="container selected-tweets" style="position: relative;z-index:2; pointer-events: none;"></div>
 <script src="/static/screen.js?random={{random()}}"></script>
 {% endblock %}
