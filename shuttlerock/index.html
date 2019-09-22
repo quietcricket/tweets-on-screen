@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en_US">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="refresh" content="3600" />
+    <title>sportify</title>
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+    <div class="l-wrap">
+        <div class="photo__wrap">
+            <div id="photoArea" class="photo__content">
+                <div class="grid-sizer"></div>
+            </div>
+        </div>
+        <div id="hidden-items" style="display: none;"></div>
+    </div>
+    <script>
+        var usr = "spotify";
+        var boardId = "jkt2019"; //
+        var checkPostIntervalSec = 30; //default 300 second
+        var speed = 150 / 60; //default move 60 px per second
+        var loadPostMax = 150; //default 300 post
+    </script>
+    <script src="./js/app.js"></script>
+</body>
+
+</html>
