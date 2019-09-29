@@ -1,9 +1,8 @@
 {
-  "name": "[INTERNAL]Twitter Poll Status Monitor",
-  "version": "0.0.2",
+  "name": "[INTERNAL]DOOH Tweets Curator",
+  "version": "0.0.1",
   "manifest_version": 2,
-  "description": "Internal extension used to get the poll voting status. Data is automatically sent to a server for further integration.",
-  "detailed_description": "Internal extension used to get the poll voting status. Data is automatically sent to a server for further integration.",
+  "description": "Internal extension used to select tweet to be featured onto the display",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
@@ -14,16 +13,10 @@
     "default_popup": "popup.html"
   },
   "permissions": [
-    "*://*/*", "storage"
+    "https://twitter.com/*", "storage", "tabs"
   ],
   "content_scripts": [{
-      "matches": ["https://twitter.com/*"],
-      "js": ["content.js"]
-    },
-    {
-      "matches": ["https://twitter.com/*"],
-      "js": ["iframe.js"],
-      "all_frames": true
-    }
-  ]
+    "matches": ["https://twitter.com/*"],
+    "js": ["content.js"]
+  }]
 }
