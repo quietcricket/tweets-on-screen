@@ -1,0 +1,39 @@
+<style>
+    .tweet-text img,
+    .tweet-handle img {
+        height: 18px;
+    }
+
+    .tweet-image img {
+        max-height: 200px;
+    }
+
+    .entry {
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+        border-bottom: solid 1px red;
+    }
+
+    img.profile {
+        width: 50px;
+    }
+</style>
+{% for e in entries %}
+<div class="entry">
+    <div class="tweet-handle d-flex">
+        <img src="{{e.profile}" class="profile"/>
+        <div>
+        <span>{{e.display|safe}}</span>
+        <span>{{e.handle}}</span>
+        </div>
+    </div>
+    <div class=" tweet-text">
+        {{e.text|safe}}
+    </div>
+    <div class="tweet-image">
+        {% if e.image %}
+        <img src="{{e.image}}" />
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
