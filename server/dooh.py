@@ -1,20 +1,45 @@
 import json
 from uuid import uuid4
 from flask import Flask, request, jsonify, render_template
+from flask_assets import Environment
 from models import init_db, TweetEntry
 import pprint
 app = Flask('dooh-app')
 app.jinja_env.globals['random'] = lambda: uuid4().hex
 app.jinja_env.autoreload = True
+Environment(app)
 
 
 @app.route('/spotify')
 def spotify():
-    return render_template('spotify.html', entries=TweetEntry.select())
+    return render_template('spotify.html')
 
 
-@app.route('/feature', methods=['GET', 'POST'])
-def ajax_feature():
+@app.route('/')
+def list_entries():
+    return render_template('list-entries.html')
+
+
+@app.route('/admin-api/get-entries/<string:status>')
+def get_entries(status):
+    entries = TweetEntry.select().where(TweetEntry.status == status).order_by(TweetEntry.id.desc())
+    resp = jsonify([e.to_dict() for e in entries])
+    resp.headers.add('Access-Control-Allow-Origin', '*')
+    return resp
+
+
+@app.route('/admin-api/change-status', methods=['POST'])
+def change_status():
+    entry = TweetEntry.get_by_id(int(request.form['id']))
+    if not entry:
+        return jsonify(result='not found')
+    entry.status = request.form['status']
+    entry.save()
+    return jsonify(result='ok')
+
+
+@app.route('/extension-api/add', methods=['POST'])
+def extension_ad_pending():
     obj = json.loads(request.form['data'])
     if obj.get('images'):
         obj['image'] = obj['images'][0]
@@ -24,30 +49,14 @@ def ajax_feature():
     return resp
 
 
-@app.route('/status', methods=['POST'])
-def ajax_status():
+@app.route('/extension-api/status', methods=['POST'])
+def extension_get_status():
     results = {}
     for t in TweetEntry.select(TweetEntry.hash, TweetEntry.status).where(TweetEntry.hash.in_(json.loads(request.form['data']))):
         results[t.hash] = t.status
     resp = jsonify(results)
     resp.headers.add('Access-Control-Allow-Origin', '*')
     return resp
-
-
-@app.route('/list/<string:status>')
-def list_entries(status):
-    return render_template('list-entries.html', entries=TweetEntry.select().where(TweetEntry.status == status).order_by(TweetEntry.id.desc()))
-
-
-@app.route('/change-status', methods=['POST'])
-def change_status():
-    entry = TweetEntry.get_by_id(int(request.form['id']))
-    print(entry)
-    if not entry:
-        return jsonify(result='not found')
-    entry.status = request.form['status']
-    entry.save()
-    return jsonify(result='ok')
 
 
 if __name__ == "__main__":

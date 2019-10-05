@@ -5,74 +5,34 @@
 <head>
     <meta charset="utf-8">
     <title>Moderation</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js"></script>
     <style>
-        .tweet-text img,
-        .tweet-handle img {
-            height: 1.2em;
-            margin-left: 3px;
-            vertical-align: middle;
-        }
 
-        .tweet-image img {
-            width: 100%;
-        }
-
-        img.profile {
-            width: 50px;
-            height: 50px;
-            border-radius: 100%;
-            object-fit: cover;
-        }
-
-        .entry {
-            width: 280px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
-            border-radius: 5px;
-            font-size: 0.8em;
-        }
-
-        @media (min-width: 1200px) {
-            .container {
-                max-width: calc(280px * 4 + 100px);
-            }
-        }
     </style>
-
+    {% assets filters="libsass", output="gen/styles.css", "styles.scss" %}
+    <link rel="stylesheet" href="{{ASSET_URL}}">
+    {% endassets %}
 </head>
 
 <body>
-    <div class="container py-4">
-        {% for e in entries %}
-        <div class="entry" id="entry-{{e.id}}">
-            <div class="tweet-handle d-flex align-items-center">
-                <img src="{{e.profile}}" class="profile mr-2" />
-                <div>
-                    <div class="display">{{e.display|safe}}</div>
-                    <div class="handle">{{e.handle}}</div>
-                </div>
-            </div>
-            <div class="tweet-text">
-                {{e.text|safe}}
-            </div>
-            <div class="tweet-image my-4">
-                {% if e.image %}
-                <img src="{{e.image}}" />
-                {% endif %}
-            </div>
-            <div>
-                <button class="btn btn-primary btn-sm" onclick="approve('{{e.id}}')">Approve</button>
-                <button class="btn btn-danger btn-sm" onclick="reject('{{e.id}}')">Reject</button>
-            </div>
+    <div class="container">
+        <div class="nav-btns text-center my-4">
+            <button class="btn btn-primary mr-2" onclick="getEntries('pending')">Pending Entries</button>
+            <button class="btn btn-primary mr-2" onclick="getEntries('approved')">Approved Entries</button>
+            <button class="btn btn-primary mr-2" onclick="getEntries('rejected')">Rejected Entries</button>
         </div>
-        {% endfor %}
+        <div class="entries-holder">
+        </div>
     </div>
-    <script src="/static/app.js?rand={{random()}}"></script>
+    {% assets output="gen/app-min.js", "app.js" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+    <script>
+        initList();
+    </script>
 </body>
 
 </html>

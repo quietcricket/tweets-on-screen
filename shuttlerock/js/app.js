@@ -1,5 +1,9 @@
-var url = "https://" + usr + ".api.shuttlerock.com/v2/boards/" + boardId + "/entries.json?page=0&per_page=20";
+var BOARD_ID = "jkt2019";
+var SPEED = 250 / 60;
+var PER_PAGE = 20;
+var url = `https://spotify.api.shuttlerock.com/v2/boards/${BOARD_ID}/entries.json?per_page=${PER_PAGE}`;
 var tweets = [];
+var incommingTweets = [];
 var index = 0;
 var loaded = false;
 var currentId = 'xxx';
@@ -23,35 +27,45 @@ function genHtml(id, html, name, username, picture, time, image) {
 }
 
 function fetchData() {
+    var page = Math.floor(incommingTweets.length / PER_PAGE) + 1;
     $.ajax({
-        url: url + '&random=' + (new Date()),
+        url: `${url}&page=${page}&random=${(new Date()).getTime()}`,
         dataType: 'json',
-        cache: 0
     }).then(function (data) {
-        var newTweets = [];
-
-        for (var t of data) {
-            newTweets.push(t.id);
-            // add new tweets
-            if (tweets.indexOf(t.id) == -1) {
-                addTweet(t);
-                index = newTweets.length - 1;
-            }
+        for (d of data) {
+            incommingTweets.push(d);
         }
-
-        // Remove deleted tweets
-        for (var ct of tweets) {
-            if (newTweets.indexOf(ct) == -1) {
-                $(`#hidden-items .${ct}`).detach();
-            }
-        }
-        tweets = newTweets;
-
-        if (!loaded) {
-            loaded = true;
-            requestAnimationFrame(animate);
+        if (data.length == PER_PAGE) {
+            fetchData();
+        } else {
+            processIncoming();
         }
     });
+}
+
+function processIncoming() {
+    var newTweets = [];
+    for (var t of incommingTweets) {
+        newTweets.push(t.id);
+        if (tweets.indexOf(t.id) == -1) {
+            addTweet(t);
+            index = newTweets.length - 1;
+        }
+    }
+
+    // Remove deleted tweets
+    for (var ct of tweets) {
+        if (newTweets.indexOf(ct) == -1) {
+            $(`.${ct}`).detach();
+        }
+    }
+    tweets = newTweets;
+
+    if (!loaded) {
+        loaded = true;
+        requestAnimationFrame(animate);
+    }
+    incommingTweets = [];
 }
 
 function addTweet(t) {
@@ -74,7 +88,7 @@ function animate(timestamp) {
     $('#photoArea .article').each(function () {
         var ele = $(this);
         var tx = parseFloat(ele.attr('tx'));
-        tx = Math.round(tx + speed);
+        tx = Math.round(tx + SPEED);
         ele.css('transform', `translate3d(0,-${tx}px,0)`);
         ele.attr('tx', tx);
     });
@@ -82,5 +96,5 @@ function animate(timestamp) {
 
 }
 
-setInterval(fetchData, 5000);
+setInterval(fetchData, 10000);
 fetchData();

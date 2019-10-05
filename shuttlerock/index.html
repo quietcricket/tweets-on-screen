@@ -8,6 +8,17 @@
     <title>sportify</title>
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <link rel="stylesheet" href="./css/style.css">
+    <style>
+        .photo__wrap {
+            height: 1360px;
+            top: 325px;
+            pointer-events: none;
+        }
+
+        .l-wrap {
+            background: url("img/bg-2.png") no-repeat center top
+        }
+    </style>
 </head>
 
 <body>
@@ -19,14 +30,10 @@
         </div>
         <div id="hidden-items" style="display: none;"></div>
     </div>
+    <script src="./js/app.js?rand=111"></script>
     <script>
-        var usr = "spotify";
-        var boardId = "jkt2019"; //
-        var checkPostIntervalSec = 30; //default 300 second
-        var speed = 150 / 60; //default move 60 px per second
-        var loadPostMax = 150; //default 300 post
+        SPEED = 150 / 60;
     </script>
-    <script src="./js/app.js"></script>
 </body>
 
 </html>

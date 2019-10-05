@@ -15,10 +15,15 @@ class TweetEntry(Model):
     image = TextField(null=True)
     images = TextField(null=True)
     time = TextField()
+    position = IntegerField(default=0)
     status = CharField(default='pending')
 
     class Meta:
         database = db
+
+    def to_dict(self):
+        fields = ['id', 'handle', 'verified', 'display', 'profile', 'text', 'image', 'time', 'position']
+        return {f: getattr(self, f) for f in fields}
 
 
 def init_db():

@@ -1,4 +1,4 @@
-var SERVER_URL = 'http://localhost:8080/'
+var SERVER_URL = 'https://dooh.link/extension-api/';
 var tweets = {};
 
 function findTweets() {
@@ -29,7 +29,7 @@ function addButton(entry) {
 
 function feature(hash) {
     $.ajax({
-        url: SERVER_URL + 'feature',
+        url: SERVER_URL + 'add',
         dataType: 'json',
         method: 'POST',
         data: {
