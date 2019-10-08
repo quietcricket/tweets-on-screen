@@ -37,21 +37,22 @@ function fetchData() {
     }).then(function (data) {
         var latency = new Date().getTime() - requestTime;
         $('#latency').val(latency);
+
         for (d of data) {
             incommingTweets.push(d);
         }
 
-        if (latency > 2000) {
+        if (latency > 3000) {
             $('#warning').html("NETWORK TOO SLOW,AUTO REFRESHING STOPPED!")
-            return;
+            incommingTweets = [];
+            setTimeout(fetchData, 5000);
         }
 
         if (data.length == PER_PAGE) {
             fetchData();
         } else {
-
-            setTimeout(fetchData, 5000);
             processIncoming();
+            setTimeout(fetchData, 5000);
         }
     }, function (error) {
         $('#latency').val(new Date().getTime() - requestTime);

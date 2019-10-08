@@ -1,4 +1,5 @@
-var SERVER_URL = 'https://dooh.link/extension-api/';
+// var SERVER_URL = 'https://dooh.link/extension-api/';
+var SERVER_URL = 'http://localhost:8080/extension-api/';
 var tweets = {};
 
 function findTweets() {
@@ -13,17 +14,17 @@ function addButton(entry) {
     var holder = entry.querySelector('[role=group]:last-child');
     var btn = document.createElement('span');
     btn.classList.add('dooh-btn');
-    btn.innerHTML = 'feature this';
+    btn.innerHTML = 'shortlist';
 
     holder.prepend(btn);
 
     var data = extractAll(holder.parentNode.parentNode);
-    tweets[data.hash] = data;
-    btn.setAttribute('hash', data.hash);
+    tweets[data.hash_id] = data;
+    btn.setAttribute('hash_id', data.hash_id);
     btn.addEventListener('click', function (e) {
         e.stopPropagation();
         e.currentTarget.innerHTML = 'pending';
-        feature(e.currentTarget.getAttribute('hash'));
+        feature(e.currentTarget.getAttribute('hash_id'));
     });
 }
 
@@ -58,9 +59,9 @@ function extractAll(ele) {
     data.profile = extractProfile(ele);
     data.text = extractText(ele);
     data.images = extractImage(ele);
-    data.time = extractTime(ele);
+    data.time_created = extractTime(ele);
     Object.assign(data, extractHandle(ele));
-    data.hash = data.handle + data.time;
+    data.hash_id = data.handle + data.time;
     return data;
 }
 
@@ -71,7 +72,7 @@ function extractHandle(ele) {
     var verified = node.querySelector('a svg');
     var handle = cleanHtml(node.querySelector('a>div>div:last-child'));
     return {
-        display: displayName,
+        display_name: displayName,
         handle: handle,
         verified: verified != null
     };
@@ -161,4 +162,4 @@ style.innerHTML = `
 document.body.appendChild(style);
 
 setInterval(findTweets, 1000);
-setInterval(getStatus, 5000);
+// setInterval(getStatus, 5000);

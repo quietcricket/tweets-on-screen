@@ -19,9 +19,10 @@ function getEntries(status) {
     $.get(`/admin-api/get-entries/${status}?random=${Math.random()}`).then(function (data) {
         entriesHolder.empty();
         for (var e of data) {
-            var img = '';
             if (e.image) {
-                img = `<img src="${e.image}" />`;
+                e.image = `<img src="${e.image}" />`;
+            } else {
+                e.image = ''
             }
 
             var html = `
@@ -29,12 +30,12 @@ function getEntries(status) {
                     <div class="tweet-handle d-flex align-items-center">
                         <img src="${e.profile}" class="profile mr-2" />
                         <div>
-                            <div class="display">${e.display}</div>
-                            <div class="handle">${e.handle}</div>
+                            <span class="display_name">${e.display_name}</span>
+                            <span class="handle">${e.handle}</span>
                         </div>
                     </div>
-                    <div class="tweet-text"> ${e.text} </div>
-                    <div class="tweet-image my-4">${img}</div>
+                    <div class="tweet-text mt-2"> ${e.text} </div>
+                    <div class="tweet-image my-2">${e.image}</div>
                     <div>
                         <button class="btn btn-primary btn-sm btn-approved" onclick="updateStatus('${e.id}','approved')">Approve</button>
                         <button class="btn btn-secondary btn-sm btn-pending" onclick="updateStatus('${e.id}','pending')">Pending</button>

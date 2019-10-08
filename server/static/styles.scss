@@ -43,6 +43,9 @@ img.profile {
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
     border-radius: 5px;
     font-size: 0.8em;
+    .handle{
+        color:#aaa;
+    }
 }
 
 @media (min-width: 1200px) {

@@ -1,11 +1,11 @@
 import json
 from uuid import uuid4
+from datetime import datetime
 from flask import Flask, request, jsonify, render_template
 from flask_assets import Environment
-from models import init_db, TweetEntry
+from models import *
 import pprint
 app = Flask('dooh-app')
-app.jinja_env.globals['random'] = lambda: uuid4().hex
 app.jinja_env.autoreload = True
 Environment(app)
 
@@ -22,7 +22,8 @@ def list_entries():
 
 @app.route('/admin-api/get-entries/<string:status>')
 def get_entries(status):
-    entries = TweetEntry.select().where(TweetEntry.status == status).order_by(TweetEntry.id.desc())
+    entries = TweetEntry.select().where(
+        TweetEntry.status == getattr(TweetStatus, status.upper())).order_by(TweetEntry.position.desc(), TweetEntry.id.desc())
     resp = jsonify([e.to_dict() for e in entries])
     resp.headers.add('Access-Control-Allow-Origin', '*')
     return resp
@@ -30,7 +31,7 @@ def get_entries(status):
 
 @app.route('/admin-api/change-status', methods=['POST'])
 def change_status():
-    entry = TweetEntry.get_by_id(int(request.form['id']))
+    entry = TweetEntry.get_by_id(request.form['id'])
     if not entry:
         return jsonify(result='not found')
     entry.status = request.form['status']
@@ -42,8 +43,8 @@ def change_status():
 def extension_ad_pending():
     obj = json.loads(request.form['data'])
     if obj.get('images'):
-        obj['image'] = obj['images'][0]
         obj['images'] = ','.join(obj['images'])
+    print(obj)
     resp = jsonify({'id': TweetEntry.replace(**obj).execute()})
     resp.headers.add('Access-Control-Allow-Origin', '*')
     return resp
@@ -52,8 +53,8 @@ def extension_ad_pending():
 @app.route('/extension-api/status', methods=['POST'])
 def extension_get_status():
     results = {}
-    for t in TweetEntry.select(TweetEntry.hash, TweetEntry.status).where(TweetEntry.hash.in_(json.loads(request.form['data']))):
-        results[t.hash] = t.status
+    for t in TweetEntry.select(TweetEntry.hash_id, TweetEntry.status).where(TweetEntry.hash_id.in_(json.loads(request.form['data']))):
+        results[t.hash_id] = t.status
     resp = jsonify(results)
     resp.headers.add('Access-Control-Allow-Origin', '*')
     return resp
