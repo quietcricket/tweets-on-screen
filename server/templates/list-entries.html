@@ -1,38 +1,26 @@
-<!doctype html>
+{% extends 'base.html' %}
+{% block title %}DOOH TWEETS{% endblock title %}
+{% block style_scripts %}
+{% assets filters="libsass", output="gen/styles.css", "styles.scss" %}
+<link rel="stylesheet" href="{{ASSET_URL}}">
+{% endassets %}
 
-<html lang="en">
+{% assets output="gen/app-min.js", "app.js" %}
+<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
 
-<head>
-    <meta charset="utf-8">
-    <title>Moderation</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js"></script>
-    <style>
-
-    </style>
-    {% assets filters="libsass", output="gen/styles.css", "styles.scss" %}
-    <link rel="stylesheet" href="{{ASSET_URL}}">
-    {% endassets %}
-</head>
-
-<body>
-    <div class="container">
-        <div class="nav-btns text-center my-4">
-            <button class="btn btn-primary mr-2" onclick="getEntries('pending')">Pending Entries</button>
-            <button class="btn btn-primary mr-2" onclick="getEntries('approved')">Approved Entries</button>
-            <button class="btn btn-primary mr-2" onclick="getEntries('rejected')">Rejected Entries</button>
-        </div>
-        <div class="entries-holder">
-        </div>
-    </div>
-    {% assets output="gen/app-min.js", "app.js" %}
-    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-    {% endassets %}
-    <script>
-        initList();
-    </script>
-</body>
-
-</html>
+{% endblock style_scripts %}
+{%block content %}
+<div class="nav-btns text-center my-4">
+    <button class="btn btn-primary mr-2" onclick="getEntries('pending')">Pending Entries</button>
+    <button class="btn btn-primary mr-2" onclick="getEntries('approved')">Approved Entries</button>
+    <button class="btn btn-primary mr-2" onclick="getEntries('rejected')">Rejected Entries</button>
+</div>
+<div class="entries-holder">
+</div>
+{% endblock %}
+{% block footer %}
+<script>
+    initList();
+</script>
+{% endblock footer %}

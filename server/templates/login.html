@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5 text-center login-page">
+    <h1 class="text-center mb-5">DOOH Tweets</h1>
+
+    <form id="login-form" class="narrower mx-auto" onsubmit="return login()">
+        <h4 class="text-secondary"> Login </h4>
+        <div class="alert alert-danger d-none password">Invalid password.</div>
+        <div class="alert alert-danger d-none email">The email you provided is not found in the system.</div>
+        <input class="form-control mb-2" type="email" required name="email" placeholder="Email" />
+        <input class="form-control mb-2" type="password" required name="password" placeholder="Password" />
+        <input class="form-control mb-2 btn btn-primary w-50" type="submit" value="Login" />
+    </form>
+    <div class="my-4 text-muted small">-- OR --</div>
+    <form id="register-form" class="narrower mx-auto" onsubmit="return register()">
+        <h4 class="text-secondary"> Register </h4>
+        <div class="alert alert-danger d-none dupliate">The email is already registered.</div>
+        <div class="alert alert-danger d-none mismatch">Password mismatch.</div>
+        <input class="form-control mb-2" type="email" required name="email" placeholder="Email" />
+        <input class="form-control mb-2" type="password" required name="password" placeholder="Password" />
+        <input class="form-control mb-2" type="password" required name="confirm-password" placeholder="Confirm Password" />
+        <input class="form-control mb-2 btn btn-primary w-50" type="submit" value="Register" />
+    </form>
+</div>
+{% endblock %}

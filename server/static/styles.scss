@@ -1,3 +1,11 @@
+.narrower {
+    max-width: 300px;
+}
+
+.narrow {
+    max-width: 600px;
+}
+
 .tweet-text img,
 .tweet-handle img {
     height: 1.2em;
@@ -18,20 +26,20 @@ img.profile {
     object-fit: cover;
 }
 
-.entries-holder.approved{
-    .btn-approved{
+.entries-holder.approved {
+    .btn-approved {
         display: none;
     }
 }
 
-.entries-holder.pending{
-    .btn-pending{
+.entries-holder.pending {
+    .btn-pending {
         display: none;
     }
 }
 
-.entries-holder.rejected{
-    .btn-rejected{
+.entries-holder.rejected {
+    .btn-rejected {
         display: none;
     }
 }
@@ -43,9 +51,17 @@ img.profile {
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
     border-radius: 5px;
     font-size: 0.8em;
-    .handle{
-        color:#aaa;
+
+    .handle {
+        color: #aaa;
     }
+
+    background-color: white;
+}
+
+.buttons .btn {
+    font-size: 0.9em;
+    padding: 2px 10px;
 }
 
 @media (min-width: 1200px) {

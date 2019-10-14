@@ -106,7 +106,7 @@ function extractImage(ele) {
             imgs.push(img.src);
         }
     }
-    return imgs;
+    return imgs.join(',');
 }
 
 function extractProfile(ele) {

@@ -26,7 +26,7 @@ function getEntries(status) {
             }
 
             var html = `
-                <div class="entry" id="entry-${e.id}">
+                <div class="entry jumbotron" id="entry-${e.id}">
                     <div class="tweet-handle d-flex align-items-center">
                         <img src="${e.profile}" class="profile mr-2" />
                         <div>
@@ -36,10 +36,12 @@ function getEntries(status) {
                     </div>
                     <div class="tweet-text mt-2"> ${e.text} </div>
                     <div class="tweet-image my-2">${e.image}</div>
-                    <div>
-                        <button class="btn btn-primary btn-sm btn-approved" onclick="updateStatus('${e.id}','approved')">Approve</button>
-                        <button class="btn btn-secondary btn-sm btn-pending" onclick="updateStatus('${e.id}','pending')">Pending</button>
-                        <button class="btn btn-danger btn-sm btn-rejected" onclick="updateStatus('${e.id}','rejected')">Reject</button>
+                    <hr/>
+                    <div class="buttons d-flex justify-content-between">
+                        <button class="btn btn-primary btn-approved" onclick="updateStatus('${e.id}','approved')">Approve</button>
+                        <button class="btn btn-danger btn-rejected" onclick="updateStatus('${e.id}','rejected')">Reject</button>
+                        <button class="btn btn-outline-secondary btn-pending"  onclick="updateStatus('${e.id}','pending')">Put Back to Pending</button>
+
                     </div>
                 </div>`;
 
@@ -66,4 +68,69 @@ function updateStatus(id, status) {
         $('#entry-' + id).detach();
         entriesHolder.masonry('layout');
     });
+}
+
+/*****************************************************************
+ * Login Page
+ */
+function login() {
+    $('.alert').removeClass('d-block');
+    var email = $('[name=email]').val().trim();
+    var password = $('[name=password]').val().trim();
+    $.post('/login', {
+        email: email,
+        password: password
+    }, function (resp) {
+        if (resp != 'ok') {
+            $(`.${resp}`).addClass('d-block');
+        } else {
+            document.location.href = '/dashboard';
+        }
+    });
+    return false;
+}
+
+function register() {
+    $('.alert').removeClass('d-block');
+    var email = $('[name=email]').val().trim();
+    var password = $('[name=password]').val().trim();
+    var confirm_password = $('[name=confirm-password]').val().trim();
+    if (password != confirm_password) {
+        $('.mismatch').addClass('d-block');
+    }
+    $.post('/register', {
+        email: email,
+        password: password
+    }, function (resp) {
+        if (resp != 'ok') {
+            $('.alert').removeClass('d-block');
+            $(`.${resp}`).addClass('d-block');
+        } else {
+            document.location.href = '/dashboard';
+        }
+    });
+    return false;
+
+}
+
+/*****************************************************************
+ * Program page
+ */
+
+function showNewProgramForm(btn) {
+    $(btn).addClass('d-none');
+    $('#new-program').removeClass('d-none');
+}
+
+function createProgram() {
+    $.post('/admin-api/create-program', {
+        'program-name': $('#program-name').val().trim()
+    }, function (resp) {
+        document.location.href = resp;
+    });
+    return false;
+}
+
+function saveProgramSettings() {
+    return false;
 }

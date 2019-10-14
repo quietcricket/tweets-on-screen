@@ -1,5 +1,7 @@
-from peewee import *
 from enum import IntEnum
+from uuid import uuid4
+from peewee import *
+from flask_login import UserMixin
 
 DB_NAME = 'dooh.sqlite'
 db = SqliteDatabase(DB_NAME)
@@ -26,10 +28,14 @@ class UserAction(IntEnum):
     SET_DELETED = 4
     CHANGE_KEY = 5
     CHANGE_SECRET = 6
+    CHANGE_HTML = 7
+    CHANGE_JS = 8
+    CHANGE_CSS = 9
 
 
 class TweetEntry(Model):
     id = AutoField()
+    program_id = IntegerField()
     hash_id = CharField(unique=True)
     handle = CharField()
     display_name = CharField()
@@ -54,21 +60,34 @@ class TweetEntry(Model):
         return {f: getattr(self, f) for f in fields}
 
 
-class User(Model):
+class User(Model, UserMixin):
     id = AutoField()
-    handle = CharField()
+    handle = CharField(null=True)
     email = CharField(unique=True)
     password = CharField()
+    is_active = BooleanField(default=True)
 
     class Meta:
         database = db
+
+    def create_program(self, program_name):
+        p = Program(name=program_name)
+        p.save()
+        ProgramUser(program_id=p.id, user_id=self.id, role=UserRole.OWNER).save()
+        return p
 
 
 class Program(Model):
     id = AutoField()
     name = CharField()
-    api_key = CharField()
-    api_secret = CharField()
+    api_key = CharField(default=lambda: uuid4().hex)
+    api_secret = CharField(default=lambda: uuid4().hex)
+    html = TextField(null=True)
+    css = TextField(null=True)
+    js = TextField(null=True)
+    images = TextField(null=True)
+    auto_approve = BooleanField(default=False)
+    is_active = BooleanField(default=True)
 
     class Meta:
         database = db
