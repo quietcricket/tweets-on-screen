@@ -1,6 +1,7 @@
-var BOARD_ID = "jkt2019";
+var BOARD_ID = "bkk2019";
 var SPEED = localStorage.getItem("speed") ? parseInt(localStorage.getItem("speed")) : 200;
-$('#speed').val(SPEED);
+var SCALE = localStorage.getItem("scale") ? parseInt(localStorage.getItem("scale")) : 50;
+
 var PER_PAGE = 20;
 var url = `https://spotify.api.shuttlerock.com/v2/boards/${BOARD_ID}/entries.json?per_page=${PER_PAGE}`;
 var tweets = [];
@@ -45,19 +46,26 @@ function fetchData() {
         if (latency > 3000) {
             $('#warning').html("NETWORK TOO SLOW,AUTO REFRESHING STOPPED!")
             incommingTweets = [];
-            setTimeout(fetchData, 5000);
-        }
-
-        if (data.length == PER_PAGE) {
+            delayFetch();
+            return;
+        } else if (data.length == PER_PAGE) {
             fetchData();
         } else {
+            $('#warning').html("");
             processIncoming();
-            setTimeout(fetchData, 5000);
+            delayFetch();
         }
     }, function (error) {
         $('#latency').val(new Date().getTime() - requestTime);
-        setTimeout(fetchData, 5000);
+        delayFetch();
     });
+}
+
+var delayTimeout = -1;
+
+function delayFetch() {
+    clearTimeout(delayTimeout);
+    delayTimeout = setTimeout(fetchData, 5000);
 }
 
 function processIncoming() {
@@ -133,4 +141,12 @@ function updateSpeed(ele) {
 
 }
 
+function scalePage(ele) {
+    SCALE = parseInt($('#scale').val());
+    localStorage.setItem("scale", SCALE);
+    $('.l-wrap').css('transform', `scale(${SCALE/100.0},${SCALE/100})`);
+}
+$('#speed').val(SPEED);
+$('#scale').val(SCALE);
+scalePage(document.querySelector('#scale'));
 fetchData();

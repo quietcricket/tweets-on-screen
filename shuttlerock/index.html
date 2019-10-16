@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en_US">
+<html lang="en_US" style="transform-origin: 0 0;">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="refresh" content="3600" />
     <title>SpotifyOnStageBKK2019</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?rand=123">
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 </head>
 
@@ -23,14 +23,17 @@
         <input type="text" value="150" name="speed" id="speed" onchange="updateSpeed(this);" />
         <br/>
         <br/>
+        <label for="latency">Scaling: </label>
+        <input type="number" id="scale" name="scale" min="20" max="100" onchange="scalePage(this);"/>
+        <input type="submit" value="submit" hidden />
+        <br/>
+        <br/>
         <label for="latency">WIFI Latency: </label>
         <input type="text" disabled id="latency" name="latency" style="border: none" />
-        <input type="submit" value="submit" hidden />
-
     </form>
 
 
-    <script src="js/app.js"></script>
+    <script src="js/app.js?rand=2345"></script>
 </body>
 
 </html>

@@ -99,7 +99,8 @@ body {
     position: relative;
     width: 1280px;
     height: 2048px;
-    background: url("../img/bg-bkk.png") no-repeat center top
+    background: url("../img/bg-bkk.png") no-repeat center top;
+    transform-origin: 0% 0%;
 }
 
 .photo__wrap {
@@ -229,11 +230,11 @@ body {
 .controls {
     position: absolute;
     top:100px;
-    left: 1400px;
-    font-size: 60px;
+    right: 20px;
+    font-size: 20px;
 }
 .controls input{
-    font-size: 60px;
+    font-size: 20px;
     width:200px;
     padding: 5px 15px;
 }

@@ -23,7 +23,35 @@
                 Automatically approve tweets</label>
         </div>
         <div class="alert alert-success">Changes saved successfully</div>
+
+        <div class="form-group">
+            <label for="html">HTML</label>
+            <textarea id="html" name="html" class="form-control">{{program.html or ''}}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="js">JavasScript</label>
+            <textarea id="js" name="js" class="form-control">{{program.html or ''}}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="css">css</label>
+            <textarea id="css" name="css" class="form-control">{{program.html or ''}}</textarea>
+        </div>
+        <div class="form-group">
+            <label>Image Assets</label>
+            <div class="row">
+                {% for image in program.images_list %}
+                <div class="col-4">
+                    <img src="{{image}}" />
+                    <button class="btn btn-danger">Delete</button>
+                </div>
+                {% endfor %}
+            </div>
+            {% if not program.images %}
+            <div class="alert alert-warning text-center">No images uploaded yet</div>
+            {% endif %}
+        </div>
         <input class="btn btn-primary" type="submit" value="Save" />
+
     </form>
 </div>
 {% endblock %}

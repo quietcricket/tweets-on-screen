@@ -41,7 +41,6 @@ function getEntries(status) {
                         <button class="btn btn-primary btn-approved" onclick="updateStatus('${e.id}','approved')">Approve</button>
                         <button class="btn btn-danger btn-rejected" onclick="updateStatus('${e.id}','rejected')">Reject</button>
                         <button class="btn btn-outline-secondary btn-pending"  onclick="updateStatus('${e.id}','pending')">Put Back to Pending</button>
-
                     </div>
                 </div>`;
 

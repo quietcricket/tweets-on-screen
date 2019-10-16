@@ -92,6 +92,14 @@ class Program(Model):
     class Meta:
         database = db
 
+    @property
+    def images_list(self):
+        return self.images.split(',') if self.images else []
+
+    def add_image(self, image_uri):
+        self.images = self.images+','+image_uri if self.images else image_uri
+        self.save()
+
 
 class ProgramUser(Model):
     id = AutoField()
