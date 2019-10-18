@@ -1,0 +1,113 @@
+{
+    "id_str": "1184842226188218370",
+    "lang": "en",
+    "place": {
+        "full_name": "Central Region, Singapore",
+        "id": "58a4c3a0d54e1400"
+    },
+    "favorite_count": 7,
+    "created_at": "2019-10-17T14:42:54.000Z",
+    "display_text_range": [0, 68],
+    "entities": {
+        "hashtags": [],
+        "urls": [{
+            "display_url": "twitter.com/yourmandevine/…",
+            "expanded_url": "https://twitter.com/yourmandevine/status/1184810580970016769",
+            "indices": [45, 68],
+            "url": "https://t.co/4XLM0GzXBR"
+        }],
+        "user_mentions": [],
+        "symbols": [],
+        "media": [{
+            "display_url": "pic.twitter.com/tJQXgsfRbW",
+            "expanded_url": "https://twitter.com/DTrain/status/1184842226188218370/photo/1",
+            "indices": [69, 92],
+            "url": "https://t.co/tJQXgsfRbW"
+        }]
+    },
+    "text": "This is good advice for basically any career https://t.co/4XLM0GzXBR https://t.co/tJQXgsfRbW",
+    "user": {
+        "id_str": "13152",
+        "name": "Dennis Chiuten",
+        "profile_image_url_https": "https://pbs.twimg.com/profile_images/1048341779567665152/NvCDaMFZ_normal.jpg",
+        "screen_name": "DTrain",
+        "verified": false
+    },
+    "photos": [{
+        "backgroundColor": {
+            "red": 204,
+            "green": 214,
+            "blue": 221
+        },
+        "cropCandidates": [{
+            "x": 0,
+            "y": 11,
+            "w": 1125,
+            "h": 630
+        }, {
+            "x": 0,
+            "y": 0,
+            "w": 1125,
+            "h": 1125
+        }, {
+            "x": 0,
+            "y": 0,
+            "w": 1125,
+            "h": 1283
+        }, {
+            "x": 0,
+            "y": 0,
+            "w": 934,
+            "h": 1868
+        }, {
+            "x": 0,
+            "y": 0,
+            "w": 1125,
+            "h": 1868
+        }],
+        "expandedUrl": "https://twitter.com/DTrain/status/1184842226188218370/photo/1",
+        "shouldShowAltBadge": false,
+        "url": "https://pbs.twimg.com/media/EHFnuOzU8AAqXy2.jpg",
+        "width": 1125,
+        "height": 1868
+    }],
+    "conversation_count": null,
+    "news_action_type": "profile",
+    "quoted_tweet": {
+        "id_str": "1184810580970016769",
+        "lang": "en",
+        "retweet_count": 202,
+        "favorite_count": 1203,
+        "created_at": "2019-10-17T12:37:09.000Z",
+        "display_text_range": [0, 278],
+        "entities": {
+            "hashtags": [],
+            "urls": [{
+                "display_url": "theringer.com/nba/2019/10/17…",
+                "expanded_url": "https://www.theringer.com/nba/2019/10/17/20917755/the-art-of-sticking-around-in-the-nba",
+                "indices": [255, 278],
+                "url": "https://t.co/tCBkcCMW1O"
+            }],
+            "user_mentions": [{
+                "id_str": "4760694445",
+                "indices": [3, 10],
+                "name": "The Ringer",
+                "screen_name": "ringer"
+            }, {
+                "id_str": "768110798770212867",
+                "indices": [11, 21],
+                "name": "#RingerNBA",
+                "screen_name": "ringernba"
+            }],
+            "symbols": []
+        },
+        "text": "At @ringer/@ringernba: The average NBA career lasts 4 to 5 years. I've always wondered how guys who aren't mega-stars beat those odds, carve out a niche, and make it. So I asked a bunch of them.\n\nHere's the result: The Art of Sticking Around in the NBA.\n\nhttps://t.co/tCBkcCMW1O",
+        "user": {
+            "id_str": "15966106",
+            "name": "Dan Devine",
+            "profile_image_url_https": "https://pbs.twimg.com/profile_images/1104565429375246337/EgtrkIr9_normal.png",
+            "screen_name": "YourManDevine",
+            "verified": true
+        }
+    }
+}

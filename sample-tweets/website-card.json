@@ -1,0 +1,150 @@
+{
+    "card": {
+        "card_platform": {
+            "platform": {
+                "audience": {
+                    "name": "production"
+                },
+                "device": {
+                    "name": "Swift",
+                    "version": "12"
+                }
+            }
+        },
+        "name": "promo_website",
+        "url": "card://1179515723565142018",
+        "binding_values": {
+            "website_shortened_url": {
+                "string_value": "https://t.co/s17WFbiFQG",
+                "type": "STRING"
+            },
+            "promo_image": {
+                "image_value": {
+                    "height": 418,
+                    "width": 800,
+                    "url": "https://pbs.twimg.com/ad_img/1179513900506718208/t9YIi6nE?format=jpg&name=orig"
+                },
+                "type": "IMAGE"
+            },
+            "_forward_card_height_": {
+                "string_value": "140",
+                "type": "STRING"
+            },
+            "promo_image_color": {
+                "image_color_value": {
+                    "palette": [{
+                        "rgb": {
+                            "blue": 212,
+                            "green": 209,
+                            "red": 209
+                        },
+                        "percentage": 49.86
+                    }, {
+                        "rgb": {
+                            "blue": 51,
+                            "green": 47,
+                            "red": 46
+                        },
+                        "percentage": 17.43
+                    }, {
+                        "rgb": {
+                            "blue": 128,
+                            "green": 155,
+                            "red": 193
+                        },
+                        "percentage": 11.45
+                    }, {
+                        "rgb": {
+                            "blue": 54,
+                            "green": 77,
+                            "red": 113
+                        },
+                        "percentage": 3.51
+                    }, {
+                        "rgb": {
+                            "blue": 126,
+                            "green": 89,
+                            "red": 49
+                        },
+                        "percentage": 2.93
+                    }]
+                },
+                "type": "IMAGE_COLOR"
+            },
+            "promo_image_original": {
+                "image_value": {
+                    "height": 418,
+                    "width": 800,
+                    "url": "https://pbs.twimg.com/ad_img/1179513900506718208/t9YIi6nE?format=jpg&name=orig"
+                },
+                "type": "IMAGE"
+            },
+            "promo_image_large": {
+                "image_value": {
+                    "height": 418,
+                    "width": 800,
+                    "url": "https://pbs.twimg.com/ad_img/1179513900506718208/t9YIi6nE?format=jpg&name=orig"
+                },
+                "type": "IMAGE"
+            },
+            "promo_image_small": {
+                "image_value": {
+                    "height": 418,
+                    "width": 800,
+                    "url": "https://pbs.twimg.com/ad_img/1179513900506718208/t9YIi6nE?format=jpg&name=orig"
+                },
+                "type": "IMAGE"
+            },
+            "vanity_url": {
+                "string_value": "www.digitalocean.com",
+                "type": "STRING"
+            },
+            "website_dest_url": {
+                "string_value": "https://www.digitalocean.com/products/droplets/?utm_source=twitter&utm_medium=paid_social&utm_campaign=DO_Dev_Awareness_TW_Tier1&utm_adgroup=DO_Dev_Awareness_TW_Tier1_FollwerLAL_KW",
+                "type": "STRING"
+            },
+            "promo_image_x_large": {
+                "image_value": {
+                    "height": 418,
+                    "width": 800,
+                    "url": "https://pbs.twimg.com/ad_img/1179513900506718208/t9YIi6nE?format=jpg&name=orig"
+                },
+                "type": "IMAGE"
+            },
+            "title": {
+                "string_value": "Deploy and Scale Seamlessly",
+                "type": "STRING"
+            },
+            "website_url": {
+                "string_value": "https://www.digitalocean.com/products/droplets/?utm_source=twitter&utm_medium=paid_social&utm_campaign=DO_Dev_Awareness_TW_Tier1&utm_adgroup=DO_Dev_Awareness_TW_Tier1_FollwerLAL_KW",
+                "type": "STRING"
+            },
+            "card_url": {
+                "scribe_key": "card_url",
+                "string_value": "https://twitter.com",
+                "type": "STRING"
+            }
+        }
+    },
+    "id_str": "1179516066592120833",
+    "lang": "en",
+    "favorite_count": 303,
+    "created_at": "2019-10-02T21:58:39.000Z",
+    "display_text_range": [0, 71],
+    "entities": {
+        "hashtags": [],
+        "urls": [],
+        "user_mentions": [],
+        "symbols": []
+    },
+    "text": "Build your next app on the all-in-one cloud platform developers love. ☁",
+    "user": {
+        "id_str": "457033547",
+        "name": "DigitalOcean",
+        "profile_image_url_https": "https://pbs.twimg.com/profile_images/1148306008437153793/Onjxs6Lw_normal.jpg",
+        "screen_name": "digitalocean",
+        "verified": true
+    },
+    "conversation_count": null,
+    "news_action_type": "profile"
+}

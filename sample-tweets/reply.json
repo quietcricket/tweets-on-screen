@@ -1,0 +1,141 @@
+{
+    "id_str": "1185090670815432704",
+    "in_reply_to_screen_name": "trxipxi",
+    "in_reply_to_status_id_str": "1185083312894693376",
+    "in_reply_to_user_id_str": "19446566",
+    "lang": "en",
+    "favorite_count": 2,
+    "created_at": "2019-10-18T07:10:08.000Z",
+    "display_text_range": [93, 255],
+    "entities": {
+        "hashtags": [],
+        "urls": [],
+        "user_mentions": [{
+            "id_str": "19446566",
+            "indices": [0, 8],
+            "name": "Trixie ☻",
+            "screen_name": "trxipxi"
+        }, {
+            "id_str": "9837972",
+            "indices": [9, 20],
+            "name": "Pedro Porto",
+            "screen_name": "pedroporto"
+        }, {
+            "id_str": "17797174",
+            "indices": [21, 27],
+            "name": "Evan Romero 🏝",
+            "screen_name": "evanr"
+        }, {
+            "id_str": "71161983",
+            "indices": [28, 40],
+            "name": "Thaiza Akemi",
+            "screen_name": "thaizaakemi"
+        }, {
+            "id_str": "36283252",
+            "indices": [41, 47],
+            "name": "Luan Knaya",
+            "screen_name": "Knaya"
+        }, {
+            "id_str": "14993218",
+            "indices": [48, 58],
+            "name": "OliNewton",
+            "screen_name": "olinewton"
+        }, {
+            "id_str": "95155842",
+            "indices": [59, 69],
+            "name": "Rishabh #𝕋𝕨𝕚𝕥𝕥𝕖𝕣ℕ𝕖𝕩𝕥",
+            "screen_name": "S_Rishabh"
+        }, {
+            "id_str": "771802056",
+            "indices": [70, 76],
+            "name": "avril",
+            "screen_name": "avrcl"
+        }, {
+            "id_str": "29993631",
+            "indices": [77, 92],
+            "name": "Matt 💡 #𝕋𝕨𝕚𝕥𝕥𝕖𝕣ℕ𝕖𝕩𝕥 🇯🇵",
+            "screen_name": "MatthewGerrard"
+        }],
+        "symbols": []
+    },
+    "text": "@trxipxi @pedroporto @evanr @thaizaakemi @Knaya @olinewton @S_Rishabh @avrcl @MatthewGerrard 6 things i like (in no order)\n🐉✈️ dragonfly\n🎼 look for new music\n💻 walk around in computer shops\n🤣 bad/cold jokes\n🖌Chinese calligraphy \n🧽keep my table clean",
+    "user": {
+        "id_str": "21368097",
+        "name": "Shang #𝕋𝕨𝕚𝕥𝕥𝕖𝕣ℕ𝕖𝕩𝕥",
+        "profile_image_url_https": "https://pbs.twimg.com/profile_images/1151841718083342336/41QCM2vI_normal.jpg",
+        "screen_name": "quietcricket",
+        "verified": false
+    },
+    "conversation_count": null,
+    "news_action_type": "profile",
+    "parent": {
+        "id_str": "1185083312894693376",
+        "in_reply_to_screen_name": "pedroporto",
+        "in_reply_to_status_id_str": "1184883449233989637",
+        "in_reply_to_user_id_str": "9837972",
+        "lang": "en",
+        "retweet_count": 0,
+        "favorite_count": 2,
+        "created_at": "2019-10-18T06:40:54.000Z",
+        "display_text_range": [61, 341],
+        "entities": {
+            "hashtags": [],
+            "urls": [],
+            "user_mentions": [{
+                "id_str": "9837972",
+                "indices": [0, 11],
+                "name": "Pedro Porto",
+                "screen_name": "pedroporto"
+            }, {
+                "id_str": "17797174",
+                "indices": [12, 18],
+                "name": "Evan Romero 🏝",
+                "screen_name": "evanr"
+            }, {
+                "id_str": "71161983",
+                "indices": [19, 31],
+                "name": "Thaiza Akemi",
+                "screen_name": "thaizaakemi"
+            }, {
+                "id_str": "36283252",
+                "indices": [32, 38],
+                "name": "Luan Knaya",
+                "screen_name": "Knaya"
+            }, {
+                "id_str": "14993218",
+                "indices": [39, 49],
+                "name": "OliNewton",
+                "screen_name": "olinewton"
+            }, {
+                "id_str": "95155842",
+                "indices": [50, 60],
+                "name": "Rishabh #𝕋𝕨𝕚𝕥𝕥𝕖𝕣ℕ𝕖𝕩𝕥",
+                "screen_name": "S_Rishabh"
+            }, {
+                "id_str": "771802056",
+                "indices": [272, 278],
+                "name": "avril",
+                "screen_name": "avrcl"
+            }, {
+                "id_str": "21368097",
+                "indices": [280, 293],
+                "name": "Shang #𝕋𝕨𝕚𝕥𝕥𝕖𝕣ℕ𝕖𝕩𝕥",
+                "screen_name": "quietcricket"
+            }, {
+                "id_str": "29993631",
+                "indices": [295, 310],
+                "name": "Matt 💡 #𝕋𝕨𝕚𝕥𝕥𝕖𝕣ℕ𝕖𝕩𝕥 🇯🇵",
+                "screen_name": "MatthewGerrard"
+            }],
+            "symbols": []
+        },
+        "text": "@pedroporto @evanr @thaizaakemi @Knaya @olinewton @S_Rishabh 6 things i like (in no order)\n✍️ drawing freely \n🦋 kids chasing bubbles\n🤣 pranks of all shapes and sizes \n🐻 hugs, hugs, more hugs\n🤯 fun, eccentric side projects \n🌚 night drives w/o a destination\n\nyour turn @avrcl, @quietcricket, @MatthewGerrard (reminded me of your joy list)",
+        "user": {
+            "id_str": "19446566",
+            "name": "Trixie ☻",
+            "profile_image_url_https": "https://pbs.twimg.com/profile_images/1140524316439638016/b9vxZKkS_normal.jpg",
+            "screen_name": "trxipxi",
+            "verified": false
+        }
+    }
+}

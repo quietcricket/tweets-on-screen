@@ -60,7 +60,12 @@ def dashboard():
 @app.route('/program-settings/<int:pid>')
 @login_required
 def program_settings(pid):
-    return render_template('program-settings.html', program=Program.get_by_id(pid))
+    return render_template('program-settings.html', p=Program.get_by_id(pid))
+
+
+@app.route('/moderation/<string:program_id>')
+def moderation_page(program_id):
+    return render_template('moderation.html', p=Program.get_by_id(program_id))
 
 
 @app.route('/admin-api/create-program', methods=['POST'])
@@ -70,14 +75,22 @@ def create_program(program_name=None):
     return url_for('program_settings', pid=p.id)
 
 
-@app.route('/admin-api/save-program-settings')
-def save_program_settings():
+@app.route('/admin-api/program-settings<int:pid>', methods=['POST'])
+def save_program_settings(pid):
+    p = Program.get_by_id(pid)
+    for k, v in request.form.items():
+        setattr(p, k, v)
+    p.save()
+
+
+@app.route('/admin-api/program-image/', methods=['POST', 'PUT', 'DELETE'])
+def upload_program_image(pid):
+    """
+    Upload by POST
+    Reorder by PUT
+    Remove by DELETE
+    """
     pass
-
-
-@app.route('/list/<string:program_id>')
-def list_entries(program_id):
-    return render_template('list-entries.html')
 
 
 @app.route('/admin-api/get-entries')
