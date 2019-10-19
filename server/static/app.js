@@ -91,11 +91,12 @@ function login() {
 
 function register() {
     $('.alert').removeClass('d-block');
-    var email = $('[name=email]').val().trim();
-    var password = $('[name=password]').val().trim();
-    var confirm_password = $('[name=confirm-password]').val().trim();
+    var email = $('#register-form [name=email]').val().trim();
+    var password = $('#register-form [name=password]').val();
+    var confirm_password = $('#register-form [name="confirm-password"]').val();
     if (password != confirm_password) {
         $('.mismatch').addClass('d-block');
+        return false;
     }
     $.post('/register', {
         email: email,
