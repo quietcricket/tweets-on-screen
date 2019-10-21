@@ -121,8 +121,7 @@ def change_status():
 
 @app.route('/extension-api/add', methods=['POST'])
 def extension_add_entry():
-
-    obj = json.loads(request.form['data'])
+    obj = json.loads(request.get_data())
     p = get_program(obj['key'], obj['secret'])
     if not p:
         return make_response({'error': 'Invalid key or secret'}, 403)
@@ -130,6 +129,7 @@ def extension_add_entry():
     del obj['key']
     del obj['secret']
     obj['program_id'] = p.id
+    obj['id']=int(obj['id'])
     # TODO: Return message to indicate duplicated entry
     return make_response({'id': Tweet.replace(**obj).execute()})
 
@@ -137,8 +137,8 @@ def extension_add_entry():
 @app.route('/extension-api/status', methods=['POST'])
 def extension_get_status():
     results = {}
-    for t in Tweet.select(Tweet.hash_id, Tweet.status).where(Tweet.hash_id.in_(json.loads(request.form['data']))):
-        results[t.hash_id] = t.status
+    for t in Tweet.select(Tweet.id, Tweet.status).where(Tweet.id.in_(json.loads(request.form['data']))):
+        results[t.id] = t.status
     return make_response(results)
 
 
@@ -146,6 +146,11 @@ def extension_get_status():
 def validate_key():
     p = get_program(request.form['key'], request.form['secret'])
     return make_response({'name': p.name if p else ''})
+
+
+@app.route('/extension-api/ping')
+def ping_server():
+    return make_response({'ok': 1})
 
 
 if __name__ == "__main__":

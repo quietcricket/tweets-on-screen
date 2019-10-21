@@ -1,0 +1,12 @@
+.dooh-btn {
+    color: #ccc;
+    border: solid 1px #999;
+    background: #666;
+    font-family: system-ui;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 5px;
+    margin: 10px auto;
+    width: auto;
+    text-transform: capitalize;
+}

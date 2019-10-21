@@ -10,7 +10,7 @@ db = SqliteDatabase(DB_NAME)
 
 logger = logging.getLogger('peewee')
 logger.addHandler(logging.StreamHandler())
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.ERROR)
 
 
 class TweetStatus(IntEnum):
@@ -98,15 +98,15 @@ class ProgramAsset(Model):
 class Tweet(Model):
     id = BigIntegerField(primary_key=True)
     program = ForeignKeyField(Program, backref='tweets')
-    screen_name = CharField()
-    name = CharField()
+    screen_name = CharField(null=True)
+    name = CharField(null=True)
     verified = BooleanField(default=False)
-    profile_image = CharField()
+    profile_image = CharField(null=True)
     text = TextField(null=True)
     photo = TextField(null=True)
     video = CharField(null=True)
-    created_at = DateTimeField()
-    raw = TextField()
+    created_at = DateTimeField(null=True)
+    raw = TextField(null=True)
     position = IntegerField(default=0)
     status = IntegerField(default=TweetStatus.PENDING)
 

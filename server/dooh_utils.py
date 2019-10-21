@@ -10,4 +10,4 @@ def make_response(obj, status_code=200):
 
 
 def get_program(key, secret):
-    return Program.select(Program.name).where(Program.api_key == key, Program.api_secret == secret).first()
+    return Program.select().where(Program.id == key, Program.secret == secret).first()

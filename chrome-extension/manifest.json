@@ -13,10 +13,11 @@
     "default_popup": "popup.html"
   },
   "permissions": [
-    "https://twitter.com/*", "storage", "tabs"
+    "https://twitter.com/*", "http://localhost:8080/*", "https://dooh.link/*", "storage"
   ],
   "content_scripts": [{
     "matches": ["https://twitter.com/*"],
     "js": ["jquery-3.4.1.min.js", "content.js"]
-  }]
+  }],
+  "web_accessible_resources": ["injection.css", "injection.js"]
 }
