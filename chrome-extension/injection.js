@@ -1,12 +1,17 @@
 function extractTweetId() {
     for (var ele of document.querySelectorAll('article')) {
-        var node = ele.parentNode.parentNode;
+        var node = ele.parentNode;
         if (node.hasAttribute('dooh')) continue;
         let key;
         for (var p of Object.keys(node)) {
             if (p.indexOf('__reactEventHandlers') == 0) {
-                let arr = node[p].children._owner.key.split('tweet-');
-                if (arr.length > 1) key = arr[arr.length - 1];
+                console.log(node[p].children.props);
+                if (!node[p].children.props.entry) {
+                    break;
+                }
+                var cont = node[p].children.props.entry.content
+                if (cont.displayType == 'Tweet')
+                    key = cont.id;
                 break;
             }
         }

@@ -4,6 +4,7 @@ from uuid import uuid4
 import json
 from peewee import *
 from flask_login import UserMixin
+from datetime import datetime
 
 DB_NAME = 'dooh.sqlite'
 db = SqliteDatabase(DB_NAME)
@@ -50,11 +51,6 @@ class User(Model, UserMixin):
     class Meta:
         database = db
 
-    def create_program(self, program_name):
-        p = Program.create(name=program_name)
-        ProgramUser.create(program=p, user=self, role=UserRole.OWNER)
-        return p
-
 
 class Program(Model):
     id = FixedCharField(max_length=33, primary_key=True,
@@ -70,6 +66,12 @@ class Program(Model):
 
     class Meta:
         database = db
+
+    @classmethod
+    def create_by_user(cls, user, program_name):
+        p = cls.create(name=program_name)
+        ProgramUser.create(program=p, user=user, roe=UserRole.OWNER)
+        return p
 
     def add_image(self, image_uri):
         self.images = self.images+','+image_uri if self.images else image_uri
@@ -101,9 +103,12 @@ class Tweet(Model):
     screen_name = CharField(null=True)
     name = CharField(null=True)
     verified = BooleanField(default=False)
-    profile_image = CharField(null=True)
+    profile_image_url = CharField(null=True)
     text = TextField(null=True)
-    photo = TextField(null=True)
+    # Stores raw medias json
+    medias = TextField(null=True)
+    # Featured photo, the first photo
+    photo = CharField(null=True)
     video = CharField(null=True)
     created_at = DateTimeField(null=True)
     raw = TextField(null=True)
@@ -113,11 +118,35 @@ class Tweet(Model):
     class Meta:
         database = db
 
-    @classmethod
-    def from_json(cls, json_str, program_id):
-        obj = json.loads(json_str)
-        self.id = int(obj['id_str'])
-        fields = ['tweet']
+    def parse_json(self, data, users_map, medias_map):
+
+        self.text = data['text']
+        self.created_at = datetime.strptime(data['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
+
+        # Extract user info
+        user = users_map[data['author_id']]
+        self.screen_name = user['username']
+        self.name = user['name']
+        self.profile_image = user['profile_image_url']
+        self.verified = user['verified']
+
+        # Extract medias
+        medias = []
+        for mid in data.get('attachments', {}).get('media_keys', []):
+            media = medias_map[mid]
+            medias.append(media)
+            if media['type'] == 'photo':
+                self.photo = media['url']
+            elif media['type'] == 'video':
+                self.photo = media['preview_image_url']
+            elif media['type'] == 'animated_gif':
+                self.photo = media['preview_image_url']
+        if medias:
+            self.medias = json.dumps(medias, indent=2)
+
+        # Store the raw json response for future use
+        self.raw = json.dumps(data, indent=2)
+        self.save()
 
     def to_dict(self):
         fields = ['id', 'name', 'screen_name', 'verified', 'display_name',

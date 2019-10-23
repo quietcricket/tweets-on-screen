@@ -68,16 +68,15 @@ def program_settings(pid):
     return render_template('program-settings.html', p=Program.select().where(Program.id == pid).first())
 
 
-@app.route('/moderation/<string:program_id>')
-def moderation_page(program_id):
-    return render_template('moderation.html', p=Program.get_by_id(program_id))
+@app.route('/moderation/<pid>')
+def moderation_page(pid):
+    return render_template('moderation.html', p=Program.get_by_id(pid))
 
 
 @app.route('/admin-api/create-program', methods=['POST'])
 @login_required
 def create_program(program_name=None):
-    p = current_user.create_program(
-        program_name or request.form['program-name'])
+    p = Program.create_by_user(current_user, program_name or request.form['program-name'])
     return url_for('program_settings', pid=p.id)
 
 
@@ -123,13 +122,14 @@ def change_status():
 def extension_add_entry():
     obj = json.loads(request.get_data())
     p = get_program(obj['key'], obj['secret'])
+    p = Program.select().first()
     if not p:
         return make_response({'error': 'Invalid key or secret'}, 403)
 
     del obj['key']
     del obj['secret']
     obj['program_id'] = p.id
-    obj['id']=int(obj['id'])
+    obj['id'] = int(obj['id'])
     # TODO: Return message to indicate duplicated entry
     return make_response({'id': Tweet.replace(**obj).execute()})
 

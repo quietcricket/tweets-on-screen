@@ -2,7 +2,9 @@ let SERVER_URL;
 const LOCAL_URL = 'http://localhost:8080/extension-api/';
 const DEV_URL = 'https://dooh.lonk/extension-api';
 const LIVE_URL = 'https://dooh.lonk/extension-api';
-fetch(LOCAL_URL + 'ping', { mode: 'cors' }).then(_ => SERVER_URL = LOCAL_URL).catch(_ => SERVER_URL = DEV_URL);
+fetch(LOCAL_URL + 'ping', {
+    mode: 'cors'
+}).then(_ => SERVER_URL = LOCAL_URL).catch(_ => SERVER_URL = DEV_URL);
 
 console.log(SERVER_URL);
 
@@ -16,10 +18,11 @@ function addButtons() {
         btn.innerHTML = 'shortlist this';
         ele.firstChild.firstChild.append(btn);
         ele.setAttribute('dooh-btn', 1);
+        btn.setAttribute('tweet-id', ele.getAttribute('dooh'));
         btn.addEventListener('click', function (e) {
             e.stopPropagation();
             e.currentTarget.innerHTML = 'pending';
-            addTweet(ele.getAttribute('dooh'));
+            addTweet(e.currentTarget.getAttribute('tweet-id'));
         });
     }
     setTimeout(addButtons, 500);
@@ -29,8 +32,14 @@ function addTweet(id) {
     fetch(SERVER_URL + 'add', {
         mode: 'cors',
         method: 'POST',
-        headers: new Headers({ "content-type": "application/json" }),
-        body: JSON.stringify({ 'id': id, 'key': 'f7b4a9bae07f47b9a0a70b7469e69ec7', 'secret': '5e147075c9384fbb942e27a7e91255e8' })
+        headers: new Headers({
+            "content-type": "application/json"
+        }),
+        body: JSON.stringify({
+            'id': id,
+            'key': 'f7b4a9bae07f47b9a0a70b7469e69ec7',
+            'secret': '5e147075c9384fbb942e27a7e91255e8'
+        })
     }).then(resp => console.log(resp));
 }
 
