@@ -28,7 +28,7 @@ function addButtons() {
     setTimeout(addButtons, 500);
 }
 
-function addTweet(id) {
+function addTweet(tid) {
     fetch(SERVER_URL + 'add', {
         mode: 'cors',
         method: 'POST',
@@ -36,7 +36,7 @@ function addTweet(id) {
             "content-type": "application/json"
         }),
         body: JSON.stringify({
-            'id': id,
+            'tid': tid,
             'key': 'f7b4a9bae07f47b9a0a70b7469e69ec7',
             'secret': '5e147075c9384fbb942e27a7e91255e8'
         })

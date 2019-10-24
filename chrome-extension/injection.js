@@ -5,13 +5,14 @@ function extractTweetId() {
         let key;
         for (var p of Object.keys(node)) {
             if (p.indexOf('__reactEventHandlers') == 0) {
-                console.log(node[p].children.props);
-                if (!node[p].children.props.entry) {
-                    break;
+                try {
+                    var cont = node[p].children.props.entry.content;
+                } catch (error) {
+                    break
                 }
-                var cont = node[p].children.props.entry.content
-                if (cont.displayType == 'Tweet')
+                if (cont.displayType == 'Tweet') {
                     key = cont.id;
+                }
                 break;
             }
         }

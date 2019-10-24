@@ -1,12 +1,9 @@
-function initList() {
+function initModeration() {
     window.entriesHolder = $('.entries-holder');
     var uri = document.location.search;
-    window.currStatus = 'pending';
-    if (uri.indexOf('=approved') > -1) {
-        currStatus = 'approved';
-    } else if (uri.indexOf('=rejected') > -1) {
-        currStatus = 'rejected';
-    }
+    var params = new URLSearchParams(document.location.search);
+    window.currStatus = params.has('status') ? params.get('status') : 'pending';
+    window.pid = params.get('pid');
     entriesHolder.masonry({
         gutter: 20,
         transitionDuration: 100
@@ -15,27 +12,28 @@ function initList() {
 }
 
 function getEntries(status) {
-    history.replaceState(null, 'Moderation - ' + status[0].toUpperCase() + status.substr(1), '?status=' + status);
-    $.get(`/admin-api/get-entries/${status}?random=${Math.random()}`).then(function (data) {
+    history.replaceState(null, `Moderation - ${status.toUpperCase()}`, `?pid=${pid}&status=${status}`);
+    $.get(`/admin-api/get-entries?pid=${pid}&status=${status}&random=${Math.random()}`).then(function (data) {
         entriesHolder.empty();
         for (var e of data) {
-            if (e.image) {
-                e.image = `<img src="${e.image}" />`;
+            if (e.photo) {
+                e.photo= `<img src="${e.photo}" />`;
             } else {
-                e.image = ''
+                e.photo= ''
             }
 
             var html = `
                 <div class="entry jumbotron" id="entry-${e.id}">
                     <div class="tweet-handle d-flex align-items-center">
-                        <img src="${e.profile}" class="profile mr-2" />
+                        <img src="${e.profile_image_url}" class="profile mr-2" />
                         <div>
-                            <span class="display_name">${e.display_name}</span>
-                            <span class="handle">${e.handle}</span>
+                            <span class="name">${e.name}</span>
+                            <br/>
+                            <span class="username">${e.username}</span>
                         </div>
                     </div>
                     <div class="tweet-text mt-2"> ${e.text} </div>
-                    <div class="tweet-image my-2">${e.image}</div>
+                    <div class="tweet-image my-2">${e.photo}</div>
                     <hr/>
                     <div class="buttons d-flex justify-content-between">
                         <button class="btn btn-primary btn-approved" onclick="updateStatus('${e.id}','approved')">Approve</button>

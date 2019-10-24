@@ -57,8 +57,8 @@ def register():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    programs = Program.select().join(ProgramUser, on=(Program.id == ProgramUser.program_id)
-                                     ).where(ProgramUser.user_id == current_user.id)
+    programs = Program.select().join(ProgramUser,
+                                     on=(Program.id == ProgramUser.program_id)).where(ProgramUser.user_id == current_user.id)
     return render_template('dashboard.html', programs=programs)
 
 
@@ -68,9 +68,9 @@ def program_settings(pid):
     return render_template('program-settings.html', p=Program.select().where(Program.id == pid).first())
 
 
-@app.route('/moderation/<pid>')
-def moderation_page(pid):
-    return render_template('moderation.html', p=Program.get_by_id(pid))
+@app.route('/moderation')
+def moderate_tweets():
+    return render_template('moderation.html')
 
 
 @app.route('/admin-api/create-program', methods=['POST'])
@@ -101,16 +101,16 @@ def upload_program_image(pid):
 @app.route('/admin-api/get-entries')
 def get_entries():
     entries = Tweet.select().where(
-        Tweet.status == getattr(
-            TweetStatus, request.args['status'].upper()),
-        Tweet.program_id == request.args.get('program_id', -1, int)).order_by(Tweet.position.desc(), Tweet.id.desc())
+        Tweet.status == getattr(TweetStatus, request.args['status'].upper()),
+        Tweet.raw.is_null()==False,
+        Tweet.program_id == request.args['pid']).order_by(Tweet.position.desc(), Tweet.id.desc())
     resp = jsonify([e.to_dict() for e in entries])
     return resp
 
 
 @app.route('/admin-api/change-status', methods=['POST'])
 def change_status():
-    entry = Tweet.get_by_id(request.form['id'])
+    entry = Tweet.get_by_id(int(request.form['id']))
     if not entry:
         return jsonify(result='not found')
     entry.status = getattr(TweetStatus, request.form['status'].upper())
@@ -122,16 +122,15 @@ def change_status():
 def extension_add_entry():
     obj = json.loads(request.get_data())
     p = get_program(obj['key'], obj['secret'])
+    # TODO: testing cheat code
     p = Program.select().first()
     if not p:
         return make_response({'error': 'Invalid key or secret'}, 403)
-
-    del obj['key']
-    del obj['secret']
-    obj['program_id'] = p.id
-    obj['id'] = int(obj['id'])
-    # TODO: Return message to indicate duplicated entry
-    return make_response({'id': Tweet.replace(**obj).execute()})
+    tid = int(obj['tid'])
+    t = Tweet.select().where(Tweet.id == tid).first()
+    if not t:
+        t = Tweet.create(id=tid, program=p, status=TweetStatus.APPROVED if p.auto_approve else TweetStatus.PENDING)
+    return make_response({'id': tid, 'status': t.status})
 
 
 @app.route('/extension-api/status', methods=['POST'])

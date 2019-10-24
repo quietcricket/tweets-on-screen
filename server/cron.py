@@ -30,7 +30,7 @@ def fetch_tweet():
     print(json.dumps(resp, indent=2))
     if resp.get('data'):
         users = {user['id']: user for user in resp['includes']['users']}
-        medias = {media['media_key']: media for media in resp['includes'].get('media',[])}
+        medias = {media['media_key']: media for media in resp['includes'].get('media', [])}
         for data in resp.get('data', []):
             t = tweets[data['id']]
             t.parse_json(data, users, medias)
@@ -44,7 +44,6 @@ if __name__ == "__main__":
 
     if credentials.get('token') is not None:
         get_token()
-    print(fetch_tweet())
-    # while True:
-    # fetch_tweet()
-    # time.sleep(1)
+    while True:
+        fetch_tweet()
+        time.sleep(1)

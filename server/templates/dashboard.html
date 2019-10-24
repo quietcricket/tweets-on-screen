@@ -7,7 +7,7 @@
         {% for p in programs %}
         <div class="program-entry row">
             <div class="col-6">{{p.name}}</div>
-            <div class="col-3"><a href="{{url_for('program_settings',pid=p.id)}}">Moderate</a></div>
+            <div class="col-3"><a href="{{url_for('moderate_tweets',pid=p.id)}}">Moderate</a></div>
             <div class="col-3"><a href="{{url_for('program_settings',pid=p.id)}}">Settings</a></div>
         </div>
         {% endfor %}

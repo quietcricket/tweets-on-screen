@@ -100,7 +100,7 @@ class ProgramAsset(Model):
 class Tweet(Model):
     id = BigIntegerField(primary_key=True)
     program = ForeignKeyField(Program, backref='tweets')
-    screen_name = CharField(null=True)
+    username = CharField(null=True)
     name = CharField(null=True)
     verified = BooleanField(default=False)
     profile_image_url = CharField(null=True)
@@ -125,9 +125,9 @@ class Tweet(Model):
 
         # Extract user info
         user = users_map[data['author_id']]
-        self.screen_name = user['username']
+        self.username = user['username']
         self.name = user['name']
-        self.profile_image = user['profile_image_url']
+        self.profile_image_url = user['profile_image_url']
         self.verified = user['verified']
 
         # Extract medias
@@ -149,9 +149,9 @@ class Tweet(Model):
         self.save()
 
     def to_dict(self):
-        fields = ['id', 'name', 'screen_name', 'verified', 'display_name',
-                  'profile_image', 'text', 'photo', 'created_at', 'position']
-        return {f: getattr(self, f) for f in fields}
+        fields = ['id', 'name', 'username', 'verified',
+                  'profile_image_url', 'text', 'photo', 'video', 'created_at', 'position']
+        return {f: str(getattr(self, f) or '') for f in fields}
 
 
 class Log(Model):
