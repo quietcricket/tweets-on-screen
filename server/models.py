@@ -51,6 +51,10 @@ class User(Model, UserMixin):
     class Meta:
         database = db
 
+    @property
+    def programs(self):
+        return Program.select().join(ProgramUser, on=(Program.id == ProgramUser.program_id)).where(ProgramUser.user_id == self.id)
+
 
 class Program(Model):
     id = FixedCharField(max_length=33, primary_key=True,

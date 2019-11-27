@@ -19,20 +19,26 @@
         </div>
         <div class="form-group form-check">
             <label for="auto_approve" class="form-check-label">
-                <input type="checkbox" name="auto_approve" id="auto_approve" class="form-check-input" />
+                <input type="checkbox" name="auto_approve" id="auto_approve" class="form-check-input" {{ 'checked' if p.auto_approve}} />
                 Automatically approve tweets</label>
         </div>
+
+        <div class="form-group">
+            <label for="max_active">Max # of approved entries</label>
+            <input type="number" id="max_active" name="max_active" class="form-control" value="{{p.max_active}}" />
+        </div>
+
         <div class="form-group">
             <label for="html">HTML</label>
             <textarea id="html" name="html" class="form-control">{{p.html or ''}}</textarea>
         </div>
         <div class="form-group">
             <label for="js">JavasScript</label>
-            <textarea id="js" name="js" class="form-control">{{p.html or ''}}</textarea>
+            <textarea id="js" name="js" class="form-control">{{p.js or ''}}</textarea>
         </div>
         <div class="form-group">
             <label for="css">css</label>
-            <textarea id="css" name="css" class="form-control">{{p.html or ''}}</textarea>
+            <textarea id="css" name="css" class="form-control">{{p.css or ''}}</textarea>
         </div>
         <div class="form-group">
             <label>Image Assets</label>

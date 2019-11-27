@@ -27,7 +27,6 @@ def fetch_tweet():
                        params={'ids': ','.join(tweets.keys()), 'expansions': 'author_id,attachments.media_keys', 'format': 'detailed'},
                        headers={'Authorization': 'Bearer '+credentials['token']})
     resp = req.json()
-    print(json.dumps(resp, indent=2))
     if resp.get('data'):
         users = {user['id']: user for user in resp['includes']['users']}
         medias = {media['media_key']: media for media in resp['includes'].get('media', [])}

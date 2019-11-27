@@ -9,4 +9,8 @@ def reset_db():
     init_db()
 
 
+def deploy():
+    pass
+
+
 reset_db()

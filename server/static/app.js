@@ -1,9 +1,12 @@
+function getParam(key, fallback = undefined) {
+    var v = new URLSearchParams(document.location.search).get(key);
+    return v ? v : fallback
+}
+
 function initModeration() {
     window.entriesHolder = $('.entries-holder');
     var uri = document.location.search;
-    var params = new URLSearchParams(document.location.search);
-    window.currStatus = params.has('status') ? params.get('status') : 'pending';
-    window.pid = params.get('pid');
+    window.currStatus = getParam('status', 'pending');
     entriesHolder.masonry({
         gutter: 20,
         transitionDuration: 100
@@ -12,14 +15,15 @@ function initModeration() {
 }
 
 function getEntries(status) {
+    var pid = getParam('pid');
     history.replaceState(null, `Moderation - ${status.toUpperCase()}`, `?pid=${pid}&status=${status}`);
     $.get(`/admin-api/get-entries?pid=${pid}&status=${status}&random=${Math.random()}`).then(function (data) {
         entriesHolder.empty();
         for (var e of data) {
             if (e.photo) {
-                e.photo= `<img src="${e.photo}" />`;
+                e.photo = `<img src="${e.photo}" />`;
             } else {
-                e.photo= ''
+                e.photo = ''
             }
 
             var html = `
@@ -116,7 +120,8 @@ function register() {
  */
 
 function showNewProgramForm(btn) {
-    $(btn).addClass('d-none');
+
+    $(btn).addClass('d-none').removeClass('d-block');
     $('#new-program').removeClass('d-none');
 }
 
@@ -130,5 +135,11 @@ function createProgram() {
 }
 
 function saveProgramSettings() {
+    var data = {};
+    for (let f of ['name', 'html', 'js', 'css', 'max_active']) {
+        data[f] = $('#' + f).val();
+    }
+    data.auto_approve = $('#auto_approve').prop('checked') ? 1 : '';
+    $.post(`/admin-api/program-settings?pid=${getParam('pid')}`, data, function (resp) {});
     return false;
 }

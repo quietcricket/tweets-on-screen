@@ -1,7 +1,7 @@
 let SERVER_URL;
 const LOCAL_URL = 'http://localhost:8080/extension-api/';
-const DEV_URL = 'https://dooh.lonk/extension-api';
-const LIVE_URL = 'https://dooh.lonk/extension-api';
+const DEV_URL = 'https://dooh.lonk/extension-api/';
+const LIVE_URL = 'https://dooh.lonk/extension-api/';
 fetch(LOCAL_URL + 'ping', {
     mode: 'cors'
 }).then(_ => SERVER_URL = LOCAL_URL).catch(_ => SERVER_URL = DEV_URL);

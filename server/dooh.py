@@ -3,7 +3,7 @@ import pprint
 from datetime import datetime
 from uuid import uuid4
 
-from flask import Flask, jsonify, redirect, render_template, request, url_for
+from flask import Flask, jsonify, redirect, render_template, render_template_string, request, url_for
 from flask_assets import Environment
 from flask_login import LoginManager, current_user, login_required, login_user
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -57,20 +57,35 @@ def register():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    programs = Program.select().join(ProgramUser,
-                                     on=(Program.id == ProgramUser.program_id)).where(ProgramUser.user_id == current_user.id)
-    return render_template('dashboard.html', programs=programs)
+    return render_template('dashboard.html', programs=current_user.programs)
 
 
-@app.route('/program-settings/<pid>')
+@app.route('/program-settings')
 @login_required
-def program_settings(pid):
+def program_settings():
+    pid = request.args['pid']
     return render_template('program-settings.html', p=Program.select().where(Program.id == pid).first())
 
 
 @app.route('/moderation')
 def moderate_tweets():
     return render_template('moderation.html')
+
+
+@app.route('/display')
+def display_program():
+    p = Program.select().where(Program.id == request.args['pid']).first()
+    return render_template_string(p.html, program=p)
+
+
+@app.route('/display-entries')
+def display_entries():
+    entries = Tweet.select().where(
+        Tweet.status == getattr(TweetStatus, 'APPROVED'),
+        Tweet.raw.is_null() == False,
+        Tweet.program_id == request.args['pid']).order_by(Tweet.position.desc(), Tweet.id.desc())
+    resp = jsonify([e.to_dict() for e in entries])
+    return resp
 
 
 @app.route('/admin-api/create-program', methods=['POST'])
@@ -80,12 +95,13 @@ def create_program(program_name=None):
     return url_for('program_settings', pid=p.id)
 
 
-@app.route('/admin-api/program-settings<int:pid>', methods=['POST'])
-def save_program_settings(pid):
-    p = Program.get_by_id(pid)
+@app.route('/admin-api/program-settings', methods=['POST'])
+def save_program_settings():
+    p = Program.get_by_id(request.args['pid'])
     for k, v in request.form.items():
         setattr(p, k, v)
     p.save()
+    return 'ok'
 
 
 @app.route('/admin-api/program-image/', methods=['POST', 'PUT', 'DELETE'])
@@ -102,7 +118,7 @@ def upload_program_image(pid):
 def get_entries():
     entries = Tweet.select().where(
         Tweet.status == getattr(TweetStatus, request.args['status'].upper()),
-        Tweet.raw.is_null()==False,
+        Tweet.raw.is_null() == False,
         Tweet.program_id == request.args['pid']).order_by(Tweet.position.desc(), Tweet.id.desc())
     resp = jsonify([e.to_dict() for e in entries])
     return resp
