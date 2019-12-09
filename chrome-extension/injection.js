@@ -1,3 +1,46 @@
+var jsonData = {
+    tweets: {},
+    users: {}
+}
+/**
+ * Add 2 invisible textareas to store the data 
+ * content.js will grab data from there
+ * a work around the pass data to content.js
+ */
+var jsonDiv = document.createElement('div');
+jsonDiv.style.display = "none";
+jsonDiv.id = "json-data";
+document.body.append(jsonDiv);
+
+/**
+ * Add a listener to capture ajax calls for tweets and users' details
+ */
+(function () {
+    var XHR = XMLHttpRequest.prototype;
+    var send = XHR.send;
+    var open = XHR.open;
+    XHR.open = function (method, url) {
+        this.url = url; // the request url
+        return open.apply(this, arguments);
+    }
+    XHR.send = function () {
+        this.addEventListener('load', function () {
+            if (this.response.indexOf('globalObjects') > -1) {
+                var data = JSON.parse(this.response).globalObjects;
+                for (var k in data.tweets) jsonData.tweets[k] = data.tweets[k];
+                for (var k in data.users) jsonData.users[k] = data.users[k];
+                jsonDiv.innerHTML = encodeURIComponent(JSON.stringify(jsonData));
+                jsonDiv.setAttribute('dirty', 1);
+            }
+        });
+        return send.apply(this, arguments);
+    };
+})();
+
+/**
+ * Loop through elements to detect tweets and their IDs
+ * Mark them for content.js to process
+ */
 function extractTweetId() {
     for (var ele of document.querySelectorAll('article')) {
         var node = ele.parentNode;

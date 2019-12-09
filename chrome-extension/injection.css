@@ -1,12 +1,45 @@
 .dooh-btn {
-    color: #ccc;
-    border: solid 1px #999;
-    background: #666;
+    color: white;
+    border: none;
+    background: #5D9BDA;
     font-family: system-ui;
     padding: 5px 10px;
-    font-size: 12px;
-    border-radius: 5px;
-    margin: 10px auto;
-    width: auto;
-    text-transform: capitalize;
+    font-size: 14px;
+    position: absolute;
+    right: 0;
+    bottom: 10px;
+    width: 140px;
+}
+
+.dooh-btn.normal:hover {
+    cursor: pointer;
+    color: #243649;
+}
+
+.dooh-btn.pending {
+    background: #94958C;
+}
+
+.dooh-btn.rejected {
+    background: #B45355;
+}
+
+.dooh-btn.approved {
+    background: #3CC861;
+}
+
+.dooh-btn::before {
+    content: "Shortlist This";
+}
+
+.dooh-btn.pending::before {
+    content: "Pending";
+}
+
+.dooh-btn.rejected::before {
+    content: "Rejected";
+}
+
+.dooh-btn.approved::before {
+    content: "Approved";
 }

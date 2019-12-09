@@ -1,8 +1,8 @@
 {
-  "name": "[INTERNAL]DOOH Tweets Curator",
-  "version": "0.0.1",
+  "name": "Tweets Curator",
+  "version": "0.0.2",
   "manifest_version": 2,
-  "description": "Internal extension used to select tweet to be featured onto the display",
+  "description": "Shortlist tweet to be featured for other purposes.",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
@@ -13,11 +13,17 @@
     "default_popup": "popup.html"
   },
   "permissions": [
-    "https://twitter.com/*", "http://localhost:8080/*", "https://dooh.link/*", "storage"
+    "https://twitter.com/*",
+    "https://firestore.googleapis.com/*",
+    "storage",
+    "tabs"
   ],
   "content_scripts": [{
     "matches": ["https://twitter.com/*"],
-    "js": ["jquery-3.4.1.min.js", "content.js"]
+    "js": ["content.js"]
   }],
+  "background": {
+    "scripts": ["firebase-app.js", "firebase-firestore.js", "background.js"]
+  },
   "web_accessible_resources": ["injection.css", "injection.js"]
 }
