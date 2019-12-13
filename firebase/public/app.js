@@ -48,8 +48,9 @@ function updateLayout() {
         ele.className = 'tweet-card';
         ele.innerHTML = makeCard(t, u);
         container.append(ele);
+        twemoji.parse(ele);
         masonry.appended(ele);
     }
     masonry.layout();
-    new imagesLoaded(container, ()=>masonry.layout());
+    new imagesLoaded(container, () => masonry.layout());
 }

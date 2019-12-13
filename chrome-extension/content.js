@@ -51,6 +51,11 @@ function addTweet(tid) {
         tweetDetails = JSON.parse(decodeURIComponent(jsonDiv.innerHTML));
     }
     var t = tweetDetails.tweets[tid];
+    var isRetweet = false;
+    if (t.retweeted_status_id_str) {
+        t = tweetDetails.tweets[t.retweeted_status_id_str];
+        isRetweet = true;
+    }
     /**
      * Place's bounding box is saved in some kind of array FireStore doesn't support
      * Delete place info for now. Not needed.
@@ -64,6 +69,9 @@ function addTweet(tid) {
     }, function (resp) {
         if (resp != 'ok') {
             alert('An error occurred for tweet: ' + resp);
+        }
+        if(isRetweet){
+            alert("This is a retweet. Original tweet shortlisted.")
         }
     });
 }
