@@ -7,9 +7,10 @@ function initFirebase(callback, testKey = false) {
     }
 
     function initDb(callback) {
-        db.enablePersistence();
-        db.collection('moderation').onSnapshot(sendStatus);
-        db.collection('moderation').get().then(snapshot => {
+        db.enablePersistence({
+            synchronizeTabs: true
+        });
+        db.collection('moderation').onSnapshot(snapshot => {
             sendStatus(snapshot);
             callback('ok');
         });
@@ -54,11 +55,14 @@ function addTweet(tweet, user, callback) {
     try {
         db.collection('tweet').doc(tweet.id_str).set(tweet);
         db.collection('user').doc(user.id_str).set(user);
-        db.collection('moderation').add({
-            id: tweet.id_str,
-            status: 'pending'
+        let m = db.collection('moderation').doc(tweet.id_str);
+        m.get().then(doc => {
+            if (!doc.exists) m.set({
+                status: 'pending'
+            });
+            callback('ok');
         });
-        callback('ok')
+        callback('ok');
     } catch (e) {
         callback(tweet.id_str);
     }
@@ -72,7 +76,7 @@ function sendStatus(snapshot) {
         data: {}
     };
     for (var doc of snapshot.docs) {
-        msg.data[doc.data().id] = doc.data().status;
+        msg.data[doc.id.toString()] = doc.data().status;
     }
     chrome.tabs.query({
         url: 'https://twitter.com/*'

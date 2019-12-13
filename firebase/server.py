@@ -8,9 +8,6 @@ os.chdir(web_dir)
 
 class Redirect(SimpleHTTPRequestHandler):
     def do_GET(self):
-     #    self.send_response(302)
-     #    self.send_header('Location', sys.argv[2])
-        # self.end_headers()
         print(self.path)
         if '/__/' in self.path:
             self.send_response(302)
@@ -18,6 +15,13 @@ class Redirect(SimpleHTTPRequestHandler):
             self.end_headers()
         else:
             super().do_GET()
+
+    def end_headers(self):
+        if '/__/' not in self.path:
+            self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+            self.send_header("Pragma", "no-cache")
+            self.send_header("Expires", "0")
+        return super().end_headers()
 
 
 HTTPServer(("", 8000), Redirect).serve_forever()

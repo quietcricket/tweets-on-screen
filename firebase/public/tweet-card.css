@@ -1,0 +1,51 @@
+.tweet-card {
+    display: inline-block;
+    width: 300px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
+    padding: 10px;
+    border-radius: 3px;
+    ;
+}
+
+.tweet-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.tweet-header svg {
+    width: 20px;
+    height: 20px;
+    vertical-align: baseline;
+    margin-right: 5px;
+}
+
+.tweet-header h5,
+.tweet-header h6 {
+    margin: 0 5px 0 0;
+}
+
+.tweet-header h5 {
+    font-size: 1rem;
+    font-weight: bolder;
+}
+
+.tweet-header h6 {
+    color: rgb(101, 119, 134)
+}
+
+.tweet-header img.profile {
+    border-radius: 100px;
+    width: 40px;
+    margin-right: 10px;
+}
+
+.tweet-body {
+    margin-bottom: 10px;
+}
+
+.tweet-medias .media {
+    width: 100%;
+    margin-bottom: 10px;
+}

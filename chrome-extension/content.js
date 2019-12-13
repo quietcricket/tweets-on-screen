@@ -36,6 +36,7 @@ function addButtons() {
         btn.addEventListener('click', function (e) {
             e.stopPropagation();
             if (!e.currentTarget.classList.contains('normal')) return;
+            e.currentTarget.className = "dooh-btn pending";
             addTweet(e.currentTarget.getAttribute('tweet-id'));
         });
     }

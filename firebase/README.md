@@ -2,7 +2,7 @@
 
 ## Rational
 To make it easier for vendors to deploy their own instance of this app. 
-Setting up a python + SQL server is kind of troublesome
+Leverage Firestore real time synchronization function to push changes to end pages
 
 
 ## Components
@@ -17,8 +17,6 @@ Setting up a python + SQL server is kind of troublesome
 * Display page: display tweets in desired format
     * Stack: static hosting of HTML & JS
     * Access rights: read only to tweets collection
-* Cloud Function: pull tweet details
-    * Triggered when new tweet get shortlisted
 
 ## Setup project
 * http://console.firebase.google.com/
@@ -31,7 +29,10 @@ Setting up a python + SQL server is kind of troublesome
     * Admin emails
 
 ## Local HTML server
-    * python3 server.py
+* python3 server.py
+
+## Allow video autoplay
+* Only works on safari now, https://www.howtogeek.com/326532/safari-now-disables-auto-playing-videos.-heres-how-to-allow-them-for-certain-sites/
 
 ## How to change Web ApiKey
 * The web api key is exposed in the chrome extension
