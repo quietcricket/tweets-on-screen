@@ -43,6 +43,10 @@ chrome.runtime.onMessage.addListener(function (msg, _, callback) {
         case 'settings-changed':
             initFirebase(callback, false);
             break;
+        case 'emoji':
+            saveEmojis(msg.timestamp, msg.emojis);
+            break;
+
     }
     return true;
 });
@@ -66,6 +70,23 @@ function addTweet(tweet, user, callback) {
     } catch (e) {
         callback(tweet.id_str);
     }
+}
+
+function saveEmojis(timestamp, emojis) {
+    /**
+     * Data too large, not using it at the moment
+     */
+    // return;
+    let e = db.collection('emojis').doc(timestamp).set({});
+    return;
+    e.get().then(doc => {
+        let records = {};
+        for (let r of emojis) {
+            if (r.hashtag.length == 0) continue;
+            records[r.hashtag] = r.assetUrl;
+        }
+        if (!doc.exists) e.set(records);
+    });
 }
 
 

@@ -1,4 +1,4 @@
-var tweetDetails = {};
+var ajaxData = {};
 var moderationStatus = {};
 /**
  * Inject CSS and JS into the page
@@ -40,20 +40,29 @@ function addButtons() {
             addTweet(e.currentTarget.getAttribute('tweet-id'));
         });
     }
+
+    var dataDiv = document.querySelector('#ajax-data');
+    if (dataDiv && dataDiv.hasAttribute('dirty')) {
+        dataDiv.removeAttribute('dirty');
+        ajaxData = JSON.parse(decodeURIComponent(dataDiv.innerHTML));
+        if (ajaxData.emoji_timestamp.length > 0) {
+            chrome.runtime.sendMessage({
+                mode: 'emoji',
+                timestamp: ajaxData.emoji_timestamp,
+                emojis: ajaxData.emojis
+            });
+        }
+    }
     setTimeout(addButtons, 500);
 }
 
 
 function addTweet(tid) {
-    var jsonDiv = document.querySelector('#json-data');
-    if (jsonDiv.hasAttribute('dirty')) {
-        jsonDiv.removeAttribute('dirty');
-        tweetDetails = JSON.parse(decodeURIComponent(jsonDiv.innerHTML));
-    }
-    var t = tweetDetails.tweets[tid];
+
+    var t = ajaxData.tweets[tid];
     var isRetweet = false;
     if (t.retweeted_status_id_str) {
-        t = tweetDetails.tweets[t.retweeted_status_id_str];
+        t = ajaxData.tweets[t.retweeted_status_id_str];
         isRetweet = true;
     }
     /**
@@ -61,7 +70,7 @@ function addTweet(tid) {
      * Delete place info for now. Not needed.
      */
     if (t.hasOwnProperty('place')) delete t.place;
-    var u = tweetDetails.users[t.user_id_str];
+    var u = ajaxData.users[t.user_id_str];
     chrome.runtime.sendMessage({
         mode: 'add',
         tweet: t,
@@ -70,7 +79,7 @@ function addTweet(tid) {
         if (resp != 'ok') {
             alert('An error occurred for tweet: ' + resp);
         }
-        if(isRetweet){
+        if (isRetweet) {
             alert("This is a retweet. Original tweet shortlisted.")
         }
     });
