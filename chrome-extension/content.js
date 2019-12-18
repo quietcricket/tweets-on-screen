@@ -5,12 +5,12 @@ var moderationStatus = {};
  * content.js is sandboxed and cannot access certain information from the page
  * injection is much better
  */
-var ele = document.createElement('link');
-ele.rel = "stylesheet";
-ele.href = chrome.extension.getURL('injection.css');
-document.head.append(ele);
+// var ele = document.createElement('link');
+// ele.rel = "stylesheet";
+// ele.href = chrome.extension.getURL('injection.css');
+// document.head.append(ele);
 
-ele = document.createElement('script');
+var ele = document.createElement('script');
 ele.src = chrome.extension.getURL('injection.js')
 document.body.append(ele);
 /**

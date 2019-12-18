@@ -28,7 +28,7 @@ document.body.append(dataDiv);
     XHR.send = function () {
         this.addEventListener('load', function () {
             // console.log('================================');
-            console.log(this.responseURL, this.responseURL.indexOf('https://pbs.twimg.com/hashflag/'));
+            // console.log(this.responseURL, this.responseURL.indexOf('https://pbs.twimg.com/hashflag/'));
             // console.log(this.response);
             var updated = false;
             if (this.response.indexOf('globalObjects') > -1) {
@@ -49,12 +49,6 @@ document.body.append(dataDiv);
             if (updated) {
                 dataDiv.innerHTML = encodeURIComponent(JSON.stringify(ajaxData));
                 dataDiv.setAttribute('dirty', 1);
-                ajaxData = {
-                    tweets: {},
-                    users: {},
-                    emojis: [],
-                    emoji_timestamp: ''
-                }
             }
         });
         return send.apply(this, arguments);

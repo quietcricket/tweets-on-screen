@@ -21,15 +21,21 @@
   <script defer src="/app.js"></script>
   <link rel="stylesheet" href="/styles.css">
 
-  <style>
-    html{
-      font-size: 14px;
-    }
-    </style>
-
 </head>
 
 <body>
+
+  <ul class="nav nav-tabs justify-content-center pt-4">
+    <li class="nav-item">
+      <a class="nav-link pending active" href="#" onclick="updateFilter('pending')">Pending </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link approved" href="#" onclick="updateFilter('approved')">Approved</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link rejected" href="#" onclick="updateFilter('rejected')">Rejected</a>
+    </li>
+  </ul>
   <div class="container-fluid py-4">
 
   </div>

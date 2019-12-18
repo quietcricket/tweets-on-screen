@@ -19,11 +19,12 @@
     "tabs"
   ],
   "content_scripts": [{
+    "css": ["injection.css"],
     "matches": ["https://twitter.com/*"],
     "js": ["content.js"]
   }],
   "background": {
     "scripts": ["firebase-app.js", "firebase-firestore.js", "background.js"]
   },
-  "web_accessible_resources": ["injection.css", "injection.js"]
+  "web_accessible_resources": ["injection.js"]
 }

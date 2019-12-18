@@ -3,28 +3,43 @@ db.enablePersistence({
     synchronizeTabs: true
 });
 
-var filter = 'pending';
+var filter = getParam('filter', 'pending');
 let tweets;
 let users;
 let moderations;
-let masonry = new Masonry('.container-fluid', {
-    gutter: 20
-});
+var masonry;
+var initialized = false;
+var totalHeight = 0;
+var currentIds = [];
+
+var masonry;
 
 db.collection('tweet').onSnapshot(tweetsChanged);
 db.collection('user').onSnapshot(usersChanged);
 db.collection('moderation').onSnapshot(moderationChanged);
 
+function initMasonry() {
+    if (masonry) masonry.destroy();
+    masonry = new Masonry('.container-fluid', {
+        gutter: 20,
+        stagger: 30
+    });
+}
+
 function tweetsChanged(snap) {
     tweets = {};
     snap.docs.map(doc => tweets[doc.id] = doc.data());
-    updateLayout();
+    if (!initialized) {
+        updateLayout();
+    }
 }
 
 function usersChanged(snap) {
     users = {};
     snap.docs.map(doc => users[doc.id] = doc.data());
-    updateLayout();
+    if (!initialized) {
+        updateLayout();
+    }
 }
 
 function moderationChanged(snap) {
@@ -36,9 +51,8 @@ function moderationChanged(snap) {
 function genButtons(ele) {
     let holder = document.createElement('div');
     let btns = {
-        'approved': '<button class="btn btn-success mod-btn" onclick="approve(event)">Approve</button>',
-        'rejected': '<button class="btn btn-danger mod-btn" onclick="reject(event)">Reject</button>',
-        'pending': '<button class="btn btn-danger mod-btn" onclick="pending(event)">Move to pending</button>'
+        'approved': '<button class="btn btn-success mod-btn" onclick="updateStatus(event,\'approved\')">Approve</button>',
+        'rejected': '<button class="btn btn-danger mod-btn" onclick="updateStatus(event,\'rejected\')">Reject</button>',
     }
     var html = '';
     for (let k in btns) {
@@ -53,48 +67,75 @@ function updateLayout() {
     if (!(tweets && users && moderations)) {
         return;
     }
+    initialized = true;
     let container = document.querySelector('.container-fluid');
-    for (let tid in moderations) {
-        let status = moderations[tid];
-        if (status != filter) continue;
-        var ele = document.createElement('div');
-        var t = tweets[tid];
-        var u = users[t.user_id_str];
+    let sortedIds = Object.keys(moderations).filter(tid => moderations[tid] == filter).sort().reverse();
+    let newIds = sortedIds.filter(_id => !currentIds.includes(_id));
+    currentIds = sortedIds;
+
+    for (let tid of newIds) {
+        let ele = document.createElement('div');
+        let t = tweets[tid];
+        let u = users[t.user_id_str];
         ele.setAttribute('tid', t.id_str);
         ele.className = 'tweet-card';
         ele.innerHTML = renderTweet(t, u);
-        container.append(ele);
+
+        container.prepend(ele);
         genButtons(ele);
         ele.addEventListener('click', function (evt) {
             let t = tweets[evt.currentTarget.getAttribute('tid')];
-            console.log(t);
-            console.log(users[t.user_id_str]);
         });
         twemoji.parse(ele);
-        masonry.appended(ele);
+    }
+    if (newIds.length > 0) {
+        initMasonry();
     }
 }
 
-function approve(evt) {
-    let tid = evt.currentTarget.parentNode.parentNode.getAttribute('tid');
+function updateStatus(evt, status) {
+    let ele = evt.currentTarget.parentNode.parentNode;
+    let tid = ele.getAttribute('tid');
+    masonry.remove(ele);
     db.collection('moderation').doc(tid).set({
-        status: 'approved'
+        status: status
     });
 }
 
-function reject(evt) {
-    let tid = evt.currentTarget.parentNode.parentNode.getAttribute('tid');
-    db.collection('moderation').doc(tid).set({
-        status: 'rejected'
-    });
+setInterval(function () {
+    var h = 0;
+    for (let ele of document.querySelectorAll('.tweet-card')) {
+        h += ele.offsetHeight;
+    }
+    if (h != totalHeight) {
+        totalHeight = h;
+        masonry.layout();
+    }
+}, 200);
 
+function getParam(key, fallback = undefined) {
+    var v = new URLSearchParams(document.location.search).get(key);
+    return v ? v : fallback
 }
 
-function pending(evt) {
-    let tid = evt.currentTarget.parentNode.parentNode.getAttribute('tid');
-    db.collection('moderation').doc(tid).set({
-        status: 'pending'
-    });
+function updateNav() {
+    for (let l of document.querySelectorAll('.nav-link')) {
+        if (l.classList.contains(filter)) {
+            l.classList.add('active');
+        } else {
+            l.classList.remove('active');
+        }
+    }
+    history.replaceState({}, {}, '/?filter=' + filter);
 }
 
-setInterval(() => masonry.layout(), 1000);
+function updateFilter(f) {
+    filter = f;
+    currentIds = [];
+    for (let ele of document.querySelectorAll('.tweet-card')) {
+        ele.parentNode.removeChild(ele);
+    }
+    updateLayout();
+    updateNav();
+}
+updateNav();
