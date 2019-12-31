@@ -58,7 +58,8 @@ function addButtons() {
 
 
 function addTweet(tid) {
-
+    const tweetFields = ['id_str', 'full_text', 'display_text_range', 'created_at', 'entities', 'extended_entities', 'user_id_str'];
+    const userFields = ['verified', 'name', 'screen_name', 'profile_image_url_https'];
     var t = ajaxData.tweets[tid];
     var isRetweet = false;
     if (t.retweeted_status_id_str) {
@@ -66,15 +67,18 @@ function addTweet(tid) {
         isRetweet = true;
     }
     /**
-     * Place's bounding box is saved in some kind of array FireStore doesn't support
-     * Delete place info for now. Not needed.
+     * Trim off unwanted data
      */
-    if (t.hasOwnProperty('place')) delete t.place;
-    var u = ajaxData.users[t.user_id_str];
+    let u = ajaxData.users[t.user_id_str];
+
+    let data = {};
+    tweetFields.map(f => data[f] = t[f]);
+    userFields.map(f => data[f] = u[f]);
+    data.status = 'pending';
+
     chrome.runtime.sendMessage({
         mode: 'add',
-        tweet: t,
-        user: u
+        data: data
     }, function (resp) {
         if (resp != 'ok') {
             alert('An error occurred for tweet: ' + resp);

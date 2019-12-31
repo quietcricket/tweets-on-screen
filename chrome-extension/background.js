@@ -10,11 +10,12 @@ function initFirebase(callback, testKey = false) {
         db.enablePersistence({
             synchronizeTabs: true
         });
-        db.collection('moderation').onSnapshot(snapshot => {
+        db.collection('entry').onSnapshot(snapshot => {
             sendStatus(snapshot);
             callback('ok');
         });
     }
+
     chrome.storage.local.get(['project', 'api-key'], function (data) {
         app = firebase.initializeApp({
             apiKey: data['api-key'],
@@ -22,7 +23,7 @@ function initFirebase(callback, testKey = false) {
         });
         db = firebase.firestore(app)
         if (testKey) {
-            db.collection('moderation').get().then(_ => initDb(callback)).catch(error => {
+            db.collection('entry').get().then(_ => initDb(callback)).catch(error => {
                 callback('Invalid Project ID or API Key');
             });
         } else {
@@ -35,7 +36,7 @@ function initFirebase(callback, testKey = false) {
 chrome.runtime.onMessage.addListener(function (msg, _, callback) {
     switch (msg.mode) {
         case 'add':
-            addTweet(msg.tweet, msg.user, callback);
+            addTweet(msg.data, callback);
             break;
         case 'ready':
             initFirebase(callback);
@@ -51,24 +52,19 @@ chrome.runtime.onMessage.addListener(function (msg, _, callback) {
     return true;
 });
 
-function addTweet(tweet, user, callback) {
+function addTweet(data, callback) {
     if (!db) {
         alert('Please set the Project Id and API Key first');
         return;
     }
     try {
-        db.collection('tweet').doc(tweet.id_str).set(tweet);
-        db.collection('user').doc(user.id_str).set(user);
-        let m = db.collection('moderation').doc(tweet.id_str);
-        m.get().then(doc => {
-            if (!doc.exists) m.set({
-                status: 'pending'
-            });
-            callback('ok');
+        let entry = db.collection('entry').doc(data.id_str);
+        entry.get().then(doc => {
+            if (!doc.exists) entry.set(data);
         });
         callback('ok');
     } catch (e) {
-        callback(tweet.id_str);
+        callback(data.id_str);
     }
 }
 
@@ -91,7 +87,6 @@ function saveEmojis(timestamp, emojis) {
 
 
 function sendStatus(snapshot) {
-    console.log("Snapshot Changed: ", snapshot.docs.length);
     var msg = {
         mode: 'status',
         data: {}
