@@ -1,27 +1,26 @@
-import sys
-import os
-from http.server import HTTPServer, SimpleHTTPRequestHandler
+import json
+from livereload import Server
+from tornado.web import RedirectHandler, StaticFileHandler
 
-web_dir = os.path.join(os.path.dirname(__file__), 'public')
-os.chdir(web_dir)
-
-
-class Redirect(SimpleHTTPRequestHandler):
-    def do_GET(self):
-        print(self.path)
-        if '/__/' in self.path:
-            self.send_response(302)
-            self.send_header('Location', self.path.replace('/__/', 'https://dooh-on-fire.web.app/__/'))
-            self.end_headers()
-        else:
-            super().do_GET()
-
-    def end_headers(self):
-        if '/__/' not in self.path:
-            self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
-            self.send_header("Pragma", "no-cache")
-            self.send_header("Expires", "0")
-        return super().end_headers()
+settings = json.load(open('.firebaserc'))
+server_url = 'https://%s.web.app/__/' % settings['projects']['default']
 
 
-HTTPServer(("", 8000), Redirect).serve_forever()
+class NoCacheHandler(StaticFileHandler):
+    def set_extra_headers(self, path):
+        self.set_header('Cache-Control', 'no-store')
+
+
+class FirebaseServer(Server):
+    def get_web_handlers(self, script):
+        return [
+            (r"/__/(.*)", RedirectHandler, {"url": server_url+"{0}"}),
+            (r'/(.*)', NoCacheHandler, {
+                'path': self.root or '.',
+                'default_filename': 'index.html',
+            })]
+
+
+server = FirebaseServer()
+server.watch('public/*.*')
+server.serve(8000, root='public')

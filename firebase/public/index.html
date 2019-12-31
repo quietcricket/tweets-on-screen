@@ -4,41 +4,40 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Welcome to Firebase Hosting</title>
+  <title>Tweets Curation</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js"></script>
   <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
-  <!-- update the version number as needed -->
   <script defer src="/__/firebase/7.5.2/firebase-app.js"></script>
-  <!-- include only the Firebase features as you need -->
   <script defer src="/__/firebase/7.5.2/firebase-auth.js"></script>
   <script defer src="/__/firebase/7.5.2/firebase-firestore.js"></script>
-  <!-- initialize the SDK after all desired features are loaded -->
   <script defer src="/__/firebase/init.js"></script>
-  <script defer src="/tweet-card.js"></script>
-  <link rel="stylesheet" href="/tweet-card.css">
-  <script defer src="/app.js"></script>
-  <link rel="stylesheet" href="/styles.css">
-
+  <link rel="stylesheet" href="/tweet.css">
+  <link rel="stylesheet" href="/admin.css">
 </head>
 
 <body>
 
   <ul class="nav nav-tabs justify-content-center pt-4">
     <li class="nav-item">
-      <a class="nav-link pending active" href="#" onclick="updateFilter('pending')">Pending </a>
+      <a class="nav-link pending active" href="#" filter="pending">Pending </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link approved" href="#" onclick="updateFilter('approved')">Approved</a>
+      <a class="nav-link approved" href="#" filter="approved">Approved</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link rejected" href="#" onclick="updateFilter('rejected')">Rejected</a>
+      <a class="nav-link rejected" href="#" filter="rejected">Rejected</a>
     </li>
   </ul>
-  <div class="container-fluid py-4">
+  <div class="container-fluid my-4">
+    <div class="tweets-container"></div>
 
   </div>
+  <script type="module">
+    import {AdminApp} from "/admin.js";
+    window.app=new AdminApp();
+   </script>
 </body>
 
 </html>
