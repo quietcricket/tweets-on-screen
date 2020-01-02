@@ -1,12 +1,13 @@
+const STATUS_PENDING = 'pending';
+const STATUS_APPROVED = 'approved';
+const STATUS_REJECTED = 'rejected';
+const STATUS_LIST = [STATUS_PENDING, STATUS_APPROVED, STATUS_REJECTED];
+
 /**
  * Base Application
  * In charge of DB related logic
  * Call renderer and layout with data
  */
-const STATUS_PENDING = 'pending';
-const STATUS_APPROVED = 'approved';
-const STATUS_REJECTED = 'rejected';
-const STATUS_LIST = [STATUS_PENDING, STATUS_APPROVED, STATUS_REJECTED];
 class BaseApp {
     constructor(layout) {
         this.layout = layout;
@@ -48,12 +49,10 @@ class BaseApp {
             }
         }
 
-        for (let tid of filteredIds) {
-            console.log(ids.includes(tid), tid, ids)
+        for (let eid of filteredIds) {
             // Remove entry if it is removed
-            if (!ids.includes(tid)) {
-                console.log('removing', tid);
-                this.layout.removeEntry(tid);
+            if (!ids.includes(eid)) {
+                this.layout.removeEntry(eid);
             }
         }
     }
@@ -80,7 +79,7 @@ class BaseRenderer {
         let media = this.expendMedia(entry.entities, entry.extended_entities);
 
         let ele = document.createElement('div');
-        ele.setAttribute('tid', entry.id_str);
+        ele.setAttribute('eid', entry.id_str);
         ele.className = 'tweet';
         ele.innerHTML = `
             <div class="tweet-header">
@@ -129,7 +128,7 @@ class BaseRenderer {
 
         if (!entities || !entities.hashtags) return text;
         for (let h of entities.hashtags) {
-            text = text.replace(`#${h.text}`, `<span class="hilight>#${h.text}</span>`);
+            text = text.replace(`#${h.text}`, `<span class="hilight">#${h.text}</span>`);
         }
         return text;
     }
@@ -146,7 +145,7 @@ class BaseRenderer {
         for (let m of entities.media) {
             let video = this.expendVideo(extended_entities, m.id_str);
             if (video) {
-                return `<video class="media" src="${video}" loop autoplay></video>`;
+                return `<video class="media" src="${video}" loop autoplay muted width="100%"></video>`;
             } else {
                 return `<img class="media" src="${m.media_url_https}">`;
             }
@@ -177,8 +176,8 @@ class BaseLayout {
         return ele;
     }
 
-    removeEntry(tid) {
-        this.container.removeChild(this._getElement(tid));
+    removeEntry(eid) {
+        this.container.removeChild(this._getElement(eid));
     }
 
     clear() {
@@ -187,8 +186,8 @@ class BaseLayout {
         }
     }
 
-    _getElement(tid) {
-        return document.querySelector(`[tid="${tid}"]`)
+    _getElement(eid) {
+        return document.querySelector(`[eid="${eid}"]`)
     }
 }
 

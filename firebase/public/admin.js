@@ -1,8 +1,8 @@
 import {
-    BaseApp,
     BaseRenderer,
-    STATUS_PENDING,
     BaseLayout,
+    BaseApp,
+    STATUS_PENDING,
     STATUS_APPROVED,
     STATUS_REJECTED
 } from "./base.js";
@@ -28,13 +28,13 @@ class AdminRenderer extends BaseRenderer {
 class AdminLayout extends BaseLayout {
     constructor() {
         super(new AdminRenderer());
-
         this.masonryHeight = 0;
         this.masonry = new Masonry(this.container, {
             gutter: 20,
             stagger: 30
         });
         setInterval(() => this.updateMasonry(), 200);
+        document.querySelector('.nav').classList.remove('d-none');
     }
 
     addEntry(entry) {
@@ -43,15 +43,15 @@ class AdminLayout extends BaseLayout {
         return ele;
     }
 
-    removeEntry(tid) {
-        this.masonry.remove(this._getElement(tid));
+    removeEntry(eid) {
+        this.masonry.remove(this._getElement(eid));
     }
 
     resetMasonry() {
         if (this.masonry) this.masonry.destroy();
         this.masonry = new Masonry(this.container, {
             gutter: 20,
-            stagger: 30
+            transitionDuration: '0.2s'
         });
     }
 
@@ -82,6 +82,11 @@ class AdminLayout extends BaseLayout {
  */
 class AdminApp extends BaseApp {
     constructor() {
+
+        if (!firebase.auth().currentUser) {
+            document.location.href = "/login.html";
+        }
+
         super(new AdminLayout());
         this.filter = this._getParam('filter', STATUS_PENDING);
         this.updateNav();
@@ -108,8 +113,8 @@ class AdminApp extends BaseApp {
 
     updateFilter() {
         this.layout.clear();
-        for (let tid of this.currentIds) {
-            this.layout.addEntry(this.allEntries[tid]);
+        for (let eid of this.currentIds) {
+            this.layout.addEntry(this.allEntries[eid]);
         }
         this.updateNav();
         this.addBtnListeners();
@@ -138,7 +143,7 @@ class AdminApp extends BaseApp {
                 btn.classList.add('disabled');
                 t.style.pointerEvents = 'none';
 
-                let ref = this.db.collection('entry').doc(t.getAttribute('tid'));
+                let ref = this.db.collection('entry').doc(t.getAttribute('eid'));
                 ref.update({
                     status: btn.classList.contains('btn-approve') ? STATUS_APPROVED : STATUS_REJECTED
                 });
@@ -147,6 +152,10 @@ class AdminApp extends BaseApp {
     }
 }
 
-export {
-    AdminApp
-}
+firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+        window.app = new AdminApp();
+    } else {
+        document.location.href = "/login.html";
+    }
+});

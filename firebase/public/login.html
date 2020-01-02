@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tweets Curation</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="/__/firebase/7.5.2/firebase-app.js"></script>
+    <script src="/__/firebase/7.5.2/firebase-auth.js"></script>
+    <script src="/__/firebase/init.js"></script>
+    <style>
+        form {
+            margin-top: 20vh;
+            width: 300px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22), 0 1px 2px rgba(0, 0, 0, 0.34);
+            border-radius: 5px;
+        }
+    </style>
+    <script>
+        // firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+
+        function login() {
+            let email = document.querySelector('#email').value;
+            let password = document.querySelector('#password').value;
+            firebase.auth().signInWithEmailAndPassword(email, password).catch(error => alert(`${error.message} (${error.code})`)).then(resp => {
+                if (resp) document.location.href = "/";
+            });
+        }
+    </script>
+
+</head>
+
+<body>
+
+    <form class="p-4 mx-auto" onsubmit="login();return false;">
+        <h2 class="text-center">Login</h2>
+        <div class="form-group">
+            <label>Email</label>
+            <input class="form-control" type="email" required name="email" id="email" placeholder="Email" />
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <input class="form-control" type="password" required name="password" id="password" placeholder="Password" />
+        </div>
+
+        <div class="text-center">
+            <input type="submit" class="btn btn-primary btn-sm" value="Login" />
+        </div>
+    </form>
+</body>
+
+</html>

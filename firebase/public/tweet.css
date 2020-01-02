@@ -53,6 +53,11 @@ img.emoji {
     margin-bottom: 10px;
 }
 
-.blue {
+
+.hilight {
     color: rgba(29, 161, 242, 1.00);
+}
+
+.tweet .timestamp{
+    font-size: 0.8em;
 }
