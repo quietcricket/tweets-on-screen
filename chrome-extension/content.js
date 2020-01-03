@@ -47,7 +47,7 @@ function addButtons() {
         ajaxData = JSON.parse(decodeURIComponent(dataDiv.innerHTML));
         if (ajaxData.emoji_timestamp.length > 0) {
             chrome.runtime.sendMessage({
-                mode: 'emoji',
+                command: 'emoji',
                 timestamp: ajaxData.emoji_timestamp,
                 emojis: ajaxData.emojis
             });
@@ -77,7 +77,7 @@ function addTweet(tid) {
     data.status = 'pending';
 
     chrome.runtime.sendMessage({
-        mode: 'add',
+        command: 'add',
         data: data
     }, function (resp) {
         if (resp != 'ok') {
@@ -90,8 +90,7 @@ function addTweet(tid) {
 }
 
 chrome.runtime.onMessage.addListener(function (msg, _, callback) {
-    console.log("Content JS Message: ", msg);
-    switch (msg.mode) {
+    switch (msg.command) {
         case 'status':
             moderationStatus = msg.data;
             updateButtonStatus();
@@ -110,6 +109,6 @@ function updateButtonStatus() {
     }
 }
 chrome.runtime.sendMessage({
-    mode: 'ready'
+    command: 'init'
 });
 addButtons();

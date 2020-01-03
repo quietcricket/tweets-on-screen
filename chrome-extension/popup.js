@@ -1,33 +1,48 @@
-var settingKeys = ['project', 'api-key'];
-document.querySelector('#save-btn').addEventListener('click', function (evt) {
-    var data = {};
-    for (var key of settingKeys) {
+function login() {
+    var message = {
+        command: 'login'
+    };
+    for (var key of ['project', 'api-key', 'email', 'password']) {
         var v = document.getElementById(key).value.trim();
         if (v.length == 0) {
-            alert('Please enter Project ID and API Key');
+            alert('Please enter all fields');
             return
         }
-        data[key] = v;
+        message[key] = v;
     }
-    chrome.storage.local.set(data, function () {
-        chrome.runtime.sendMessage({
-            mode: 'settings-changed'
-        }, function (resp) {
-            if (resp == 'ok') {
-                alert('Project setup successfully.');
-                window.close();
-            } else {
-                alert(resp);
-            }
-        });
+
+    chrome.runtime.sendMessage(message, resp => {
+        if (resp == 'ok') {
+            alert('Login successfully.');
+        } else {
+            alert(resp);
+        }
     });
+}
+
+function logout() {
+    if (!confirm("Are you sure you want to log out?")) return;
+    chrome.runtime.sendMessage({
+        command: 'logout'
+    });
+
+    document.querySelector('.logtout').classList.add('d-none');
+    document.querySelector('.login').classList.remove('d-none');
+}
+
+chrome.storage.local.get(['project', 'email'], resp => {
+    let project = resp['project'];
+    let email = resp['email'];
+    if (project && email) {
+        document.querySelector('.status').innerHTML = `
+        You have logged in as 
+        <span>${email}</span> 
+        for <span>${project}</span>`;
+        document.querySelector('.logout').classList.remove('d-none');
+    } else {
+        document.querySelector('.login').classList.remove('d-none');
+    }
 });
 
-chrome.storage.local.get(settingKeys, function (resp) {
-    for (var key of settingKeys) {
-        var v = resp[key];
-        if (v) {
-            document.getElementById(key).value = v;
-        }
-    }
-});
+document.querySelector('#login-btn').addEventListener('click', login);
+document.querySelector('#logout-btn').addEventListener('click', logout);

@@ -89,6 +89,7 @@ class AdminApp extends BaseApp {
 
         super(new AdminLayout());
         this.filter = this._getParam('filter', STATUS_PENDING);
+        document.querySelector('body').classList.add(this.filter);
         this.updateNav();
         window.onpopstate = () => this.updateFilter();
 
@@ -144,8 +145,11 @@ class AdminApp extends BaseApp {
                 t.style.pointerEvents = 'none';
 
                 let ref = this.db.collection('entry').doc(t.getAttribute('eid'));
+                let status = btn.classList.contains('btn-approve') ? STATUS_APPROVED : STATUS_REJECTED;
+                let log = `${new Date().toISOString()}|${status[0].toUpperCase()}|${firebase.auth().currentUser.email}`;
                 ref.update({
-                    status: btn.classList.contains('btn-approve') ? STATUS_APPROVED : STATUS_REJECTED
+                    status: status,
+                    log: firebase.firestore.FieldValue.arrayUnion(log)
                 });
             });
         }

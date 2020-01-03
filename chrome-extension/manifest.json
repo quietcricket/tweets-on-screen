@@ -2,7 +2,7 @@
   "name": "Tweets Curator",
   "version": "0.0.2",
   "manifest_version": 2,
-  "description": "Shortlist tweet to be featured for other purposes.",
+  "description": "Shortlist tweet to be featured for further usage.",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
@@ -19,12 +19,12 @@
     "tabs"
   ],
   "content_scripts": [{
-    "css": ["injection.css"],
     "matches": ["https://twitter.com/*"],
+    "css": ["injection.css"],
     "js": ["content.js"]
   }],
   "background": {
-    "scripts": ["firebase-app.js", "firebase-firestore.js", "background.js"]
+    "scripts": ["firebase-app.js", "firebase-auth.js", "firebase-firestore.js", "background.js"]
   },
   "web_accessible_resources": ["injection.js"]
 }
