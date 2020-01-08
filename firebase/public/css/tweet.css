@@ -1,9 +1,10 @@
 img.emoji {
-    width: 20px;
-    margin-right: 5px;
+    height: 1.1em;
+    margin:0 0.2em;
+    vertical-align:baseline;
 }
 
-.tweet{
+.tweet {
     display: inline-block;
     margin-bottom: 20px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22), 0 1px 2px rgba(0, 0, 0, 0.34);
@@ -18,15 +19,15 @@ img.emoji {
 }
 
 .tweet-header svg {
-    width: 20px;
-    height: 20px;
+    width: 1em;
+    height: 1em;
     vertical-align: baseline;
-    margin-right: 5px;
+    margin-right: 0.2em;
 }
 
 .tweet-header h5,
 .tweet-header h6 {
-    margin: 0 5px 0 0;
+    margin: 0 0.5em 0 0;
 }
 
 .tweet-header h5 {
@@ -39,9 +40,10 @@ img.emoji {
 }
 
 .tweet-header img.profile {
-    border-radius: 100px;
-    width: 40px;
-    margin-right: 10px;
+    border-radius: 100%;
+    width: 1.2em;
+    margin-right: 0.5em;
+    vertical-align: baseline;
 }
 
 .tweet-body {
@@ -58,6 +60,6 @@ img.emoji {
     color: rgba(29, 161, 242, 1.00);
 }
 
-.tweet .timestamp{
+.tweet .timestamp {
     font-size: 0.8em;
 }

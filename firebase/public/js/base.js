@@ -89,7 +89,7 @@ class BaseRenderer {
             </div>
             <div class="tweet-body">${text}</div>
             <div class="tweet-medias"> ${media}</div>
-            <div class="timestamp">${entry.created_at.substr(0,20)}</div>
+            <div class="timestamp">${this.formatDate(entry.created_at)}</div>
             `;
         return ele;
     }
@@ -103,10 +103,12 @@ class BaseRenderer {
         var text = entry.full_text;
         var startIndex = entry.display_text_range[0];
         var endIndex = entry.display_text_range[1];
+        console.log(entry.full_text.length, startIndex, endIndex);
         while (true) {
             if (endIndex == text.length || text[endIndex] == ' ') break;
             endIndex++;
         }
+        console.log(entry.full_text.length, startIndex, endIndex);
         return text.substring(startIndex, endIndex);
     }
 
@@ -161,6 +163,10 @@ class BaseRenderer {
                 return m.video_info.variants[0].url
             }
         }
+    }
+
+    formatDate(date) {
+        return date.substr(0, 20);
     }
 }
 

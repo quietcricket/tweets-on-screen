@@ -22,5 +22,7 @@ class FirebaseServer(Server):
 
 
 server = FirebaseServer()
-server.watch('public/*.*')
+server.watch('public/*')
+server.watch('public/css/*')
+server.watch('public/js/*')
 server.serve(8000, root='public')
