@@ -17,19 +17,23 @@ document.body.append(dataDiv);
 /**
  * Add a listener to capture ajax calls for tweets and users' details
  */
-(function () {
+(function() {
     var XHR = XMLHttpRequest.prototype;
     var send = XHR.send;
     var open = XHR.open;
-    XHR.open = function (method, url) {
+    XHR.open = function(method, url) {
         this.url = url;
         return open.apply(this, arguments);
     }
-    XHR.send = function () {
-        this.addEventListener('load', function () {
+    XHR.send = function() {
+        this.addEventListener('load', function() {
             // console.log('================================');
             // console.log(this.responseURL, this.responseURL.indexOf('https://pbs.twimg.com/hashflag/'));
             // console.log(this.response);
+            if (this.response.indexOf("bentruscello") > -1) {
+                console.log(this.responseURL);
+                console.log(this.response);
+            }
             var updated = false;
             if (this.response.indexOf('globalObjects') > -1) {
                 var data = JSON.parse(this.response).globalObjects;

@@ -20,7 +20,7 @@ class BaseApp {
         this.groups = {};
         STATUS_LIST.map(k => this.groups[k] = []);
 
-        this.filter = STATUS_PENDING;
+        this.filter = STATUS_APPROVED;
     }
 
     get currentIds() {
@@ -83,9 +83,12 @@ class BaseRenderer {
         ele.className = 'tweet';
         ele.innerHTML = `
             <div class="tweet-header">
-                <img class="profile" src="${entry.profile_image_url_https}">
-                <h5>${twemoji.parse(entry.name)}</h5> ${verified}
-                <h6>@${entry.screen_name}</h6>
+                <img class="profile" src="https://avatars.io/twitter/${entry.screen_name}">
+                <div class="name">
+                    <h5>${twemoji.parse(entry.name)}</h5>
+                    ${verified}
+                    <h6>@${entry.screen_name}</h6>
+                </div>
             </div>
             <div class="tweet-body">${text}</div>
             <div class="tweet-medias"> ${media}</div>
@@ -103,12 +106,10 @@ class BaseRenderer {
         var text = entry.full_text;
         var startIndex = entry.display_text_range[0];
         var endIndex = entry.display_text_range[1];
-        console.log(entry.full_text.length, startIndex, endIndex);
         while (true) {
             if (endIndex == text.length || text[endIndex] == ' ') break;
             endIndex++;
         }
-        console.log(entry.full_text.length, startIndex, endIndex);
         return text.substring(startIndex, endIndex);
     }
 

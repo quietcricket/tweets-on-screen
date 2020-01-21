@@ -1,17 +1,27 @@
 var db;
 var app;
 
+var moderationStatus = {};
 
 function initDb() {
     db = firebase.firestore(app);
     db.enablePersistence({
         synchronizeTabs: true
     });
-    db.collection('entry').onSnapshot(sendStatus);
+    db.collection('entry').onSnapshot(snapshot => {
+        moderationStatus = {};
+        for (var doc of snapshot.docs) {
+            moderationStatus[doc.id.toString()] = doc.data().status;
+        }
+        sendStatus();
+    });
 }
 
 function init(callback) {
-    if (app) return callback('ok')
+    if (app) {
+        sendStatus();
+        return callback('ok');
+    }
 
     chrome.storage.local.get(['api-key', 'project'], data => {
         app = firebase.initializeApp({
@@ -71,6 +81,9 @@ chrome.runtime.onMessage.addListener((msg, _, callback) => {
         case 'logout':
             logout();
             break
+        case 'status':
+            callback(moderationStatus);
+            break;
     }
     return true;
 });
@@ -89,17 +102,10 @@ async function addTweet(data, callback) {
     }
 }
 
-function sendStatus(snapshot) {
-    var msg = {
-        command: 'status',
-        data: {}
-    };
-    for (var doc of snapshot.docs) {
-        msg.data[doc.id.toString()] = doc.data().status;
-    }
+function sendStatus() {
     chrome.tabs.query({
         url: 'https://twitter.com/*'
     }, tabs => {
-        for (t of tabs) chrome.tabs.sendMessage(t.id, msg);
+        for (t of tabs) chrome.tabs.sendMessage(t.id, { command: 'status', data: moderationStatus });
     });
 }

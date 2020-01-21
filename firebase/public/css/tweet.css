@@ -13,37 +13,40 @@ img.emoji {
 }
 
 .tweet-header {
-    display: flex;
-    align-items: center;
     margin-bottom: 10px;
+    display: flex;
 }
 
 .tweet-header svg {
-    width: 1em;
-    height: 1em;
-    vertical-align: baseline;
-    margin-right: 0.2em;
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.2rem;
+}
+.name{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.name h6, .name h5 {
+    margin:0;
 }
 
-.tweet-header h5,
-.tweet-header h6 {
-    margin: 0 0.5em 0 0;
-}
-
-.tweet-header h5 {
+.name h5 {
     font-size: 1rem;
     font-weight: bolder;
+    margin-right: 0.2rem;
 }
 
-.tweet-header h6 {
+.name h6 {
+    font-size: 0.9rem;
     color: rgb(101, 119, 134)
 }
 
 .tweet-header img.profile {
-    border-radius: 100%;
-    width: 1.2em;
+    border-radius:1000px; 
+    width: 3em;
+    height:3em;
     margin-right: 0.5em;
-    vertical-align: baseline;
 }
 
 .tweet-body {

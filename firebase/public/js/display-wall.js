@@ -6,7 +6,7 @@ import {
 } from "./base.js";
 // Trying to mimic this: https://pbs.twimg.com/media/ENkbOItVUAACbvK?format=jpg&name=4096x4096
 // No image, just text
-class SingleRenderer extends BaseRenderer {
+class WallRenderer extends BaseRenderer {
     render(entry) {
         let ele = super.render(entry);
         let logo = document.createElement('span');
@@ -15,17 +15,13 @@ class SingleRenderer extends BaseRenderer {
         ele.append(logo);
         return ele;
     }
-
-    expendMedia(entities, extended_entities) {
-        return "";
-    }
 }
 
-class SingleLayout extends BaseLayout {
+class WallLayout extends BaseLayout {
     constructor() {
-        super(new SingleRenderer());
+        super(new WallRenderer());
         this.index = 0;
-        setInterval(() => this.next(), 3000);
+        // setInterval(() => this.next(), 3000);
     }
 
     next() {
@@ -37,4 +33,5 @@ class SingleLayout extends BaseLayout {
     }
 }
 
-window.app = new BaseApp(new SingleLayout());
+
+window.app = new BaseApp(new WallLayout());

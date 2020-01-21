@@ -28,6 +28,7 @@ class AdminRenderer extends BaseRenderer {
 class AdminLayout extends BaseLayout {
     constructor() {
         super(new AdminRenderer());
+        this.filter=STATUS_PENDING;
         this.masonryHeight = 0;
         this.masonry = new Masonry(this.container, {
             gutter: 20,

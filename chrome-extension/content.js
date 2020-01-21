@@ -33,7 +33,7 @@ function addButtons() {
         ele.firstChild.firstChild.append(btn);
         ele.setAttribute('dooh-btn', 1);
         btn.setAttribute('tweet-id', tid);
-        btn.addEventListener('click', function (e) {
+        btn.addEventListener('click', function(e) {
             e.stopPropagation();
             if (!e.currentTarget.classList.contains('normal')) return;
             e.currentTarget.className = "dooh-btn pending";
@@ -79,7 +79,7 @@ function addTweet(tid) {
     chrome.runtime.sendMessage({
         command: 'add',
         data: data
-    }, function (resp) {
+    }, function(resp) {
         if (resp != 'ok') {
             alert('An error occurred for tweet: ' + resp);
         }
@@ -89,9 +89,10 @@ function addTweet(tid) {
     });
 }
 
-chrome.runtime.onMessage.addListener(function (msg, _, callback) {
+chrome.runtime.onMessage.addListener(function(msg, _, callback) {
     switch (msg.command) {
         case 'status':
+            console.log(msg);
             moderationStatus = msg.data;
             updateButtonStatus();
             break;
@@ -110,5 +111,7 @@ function updateButtonStatus() {
 }
 chrome.runtime.sendMessage({
     command: 'init'
+}, resp => {
+    console.log(resp);
+    addButtons();
 });
-addButtons();
