@@ -109,9 +109,9 @@ function updateButtonStatus() {
         }
     }
 }
+
 chrome.runtime.sendMessage({
     command: 'init'
 }, resp => {
-    console.log(resp);
     addButtons();
 });

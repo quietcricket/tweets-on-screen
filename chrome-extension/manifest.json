@@ -15,11 +15,10 @@
     "permissions": [
         "https://twitter.com/*",
         "https://firestore.googleapis.com/*",
-        "storage",
-        "tabs"
+        "storage"
     ],
     "content_scripts": [{
-        "matches": ["https://twitter.com/search?*","https://twitter.com/hashtag/*", "https://twitter.com/home"],
+        "matches": ["https://twitter.com/search?*", "https://twitter.com/hashtag/*", "https://twitter.com/home", "https://twitter.com/"],
         "css": ["injection.css"],
         "js": ["content.js"]
     }],

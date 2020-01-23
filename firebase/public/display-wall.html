@@ -15,38 +15,58 @@
     <script defer src="/__/firebase/init.js"></script>
     <link rel="stylesheet" href="/css/tweet.css">
     <style>
-        .tweet {
-            padding: 1em;
-            width:calc(50% - 15px);
-            margin-right: 15px;
-        }
+    .tweet {
+        padding: 1em;
+        width: 400px;
+    }
 
-        .tweet-header svg{
-            vertical-align: middle;
-        }
-        .tweet-body {
-            margin-top: 1em;
-            line-height: 1.5;
-            margin-bottom: 1em;
-        }
+    .tweet-body {
+        margin-top: 1em;
+        line-height: 1.5;
+        margin-bottom: 1em;
+    }
 
-        .twitter-logo svg {
-            width: 1.5em;
-            position: absolute;
-            right: 1em;
-            top: 1em;
-        }
-        img.emoji{
-            display: inline-block;
-            /* transform: translate(0,10px); */
-        }
+    .twitter-logo svg {
+        width: 1.5rem;
+        float: right;
+    }
+
+    img.emoji {
+        display: inline-block;
+    }
+
+    .parameters {
+        position: absolute;
+        width: 200px;
+        padding: 1em;
+        font-size: 0.8em;
+        top:2em;
+        left:2em;
+    }
+
+    </style>
+    <style id="dynamic-styles">
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="tweets-container py-4"></div>
+    <div class="parameters border">
+        <div class="form-group">
+            <label>Number of Columns</label>
+            <input type="number" id="wall-cols" class="form-control form-control-sm" />
+        </div>
+
+        <div class="form-group">
+            <label>Column Width</label>
+            <input type="number" id="wall-col-width" class="form-control form-control-sm" />
+        </div>
+
+        <div class="form-group">
+            <label>Speed</label>
+            <input type="number" id="wall-speed" class="form-control form-control-sm" />
+        </div>
     </div>
+    <div class="tweets-container"></div>
     <script type="module" src="/js/display-wall.js"> </script>
 </body>
 
