@@ -2,14 +2,13 @@
     "name": "Tweets Curator",
     "version": "0.0.2",
     "manifest_version": 2,
-    "description": "Shortlist tweet to be featured for further usage.",
+    "description": "Curate tweets from twitter.com into a saved list. The saved tweets will be displayed in custom HTML for other purpose.",
     "icons": {
         "16": "icons/icon16.png",
         "48": "icons/icon48.png",
         "128": "icons/icon128.png"
     },
     "browser_action": {
-        "default_icon": "icons/icon19.png",
         "default_popup": "popup.html"
     },
     "permissions": [
