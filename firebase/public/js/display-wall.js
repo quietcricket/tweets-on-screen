@@ -19,21 +19,72 @@ class WallRenderer extends BaseRenderer {
 class WallLayout extends BaseLayout {
     constructor() {
         super(new WallRenderer());
+        this.parameters = { 'wall-cols': 3, 'wall-col-width': 400, 'wall-speed': 5 };
         this.index = 0;
+        this.margin = 15;
+        document.body.addEventListener('keydown', evt => {
+            if (evt.key == 'p' || evt.key == 'P') {
+                let p = document.querySelector('.parameters');
+                p.style.display = p.style.display == 'none' ? 'block' : 'none';
+            }
+        });
 
-        this.cols = this._getStoredValue('wall-cols', 3);
-        this.width = this._getStoredValue('wall-col-width', 400);
-        this.speed = this._getStoredValue('wall-speed', 5);
+        for (let k in this.parameters) {
+            let v = localStorage.getItem(k);
+            let ele = document.getElementById(k);
+            ele.value = v ? v : this.parameters[k];
+            this.parameters[k] = parseFloat(ele.value);
+            ele.addEventListener('change', this.updateParameter);
+        }
+
+        this.colHeights = [];
+        for (var i = 0; i < this.parameters['wall-cols']; i++) {
+            this.colHeights.push(0);
+        }
+        this.tick();
+        let cols = this.parameters['wall-cols'];
+        let w = this.parameters['wall-col-width'];
+        document.getElementById('dynamic-styles').innerHTML = `
+        .tweets-wall{
+            left:${(window.innerWidth-this.margin*(cols-1)-w*cols)/2}px;
+            width:${this.margin*(cols-1)+w*cols}px;
+        }
+        .tweet{
+            width:${w}px;
+        }`;
+        this.wall = document.querySelector('.tweets-wall');
     }
 
-    _getStoredValue(key, defaultValue) {
-        let v = localStorage.getItem(key);
-        document.getElementById(key).value = v ? v : defaultValue;
-        return v ? parseInt(v) : defaultValue
+    updateParameter(evt) {
+        localStorage.setItem(evt.currentTarget.id, evt.currentTarget.value);
     }
 
-    tick() {}
+    tick() {
+        window.requestAnimationFrame(t => this.tick());
+        if (this.container.childElementCount == 0) {
+            return;
+        }
+        if (this.wall.childElementCount == 0) {
+            let cols = this.parameters['wall-cols'];
+            let ys = Array(cols).fill(0);
+
+            for (var i = 0; i < this.container.childElementCount; i++) {
+                let col = i % cols;
+                let cc = this.container.childNodes[i].cloneNode(true);
+                cc.setAttribute('y', window.innerHeight);
+                cc.style.left = this.parameters['wall-col-width'] * col + this.margin * (col - 1) + 'px';
+                cc.style.top = ys[col] + 'px';
+                this.wall.appendChild(cc);
+                ys[col] += cc.offsetHeight + this.margin;
+            }
+        }
+        for (let t of this.wall.childNodes) {
+            let y = parseInt(t.getAttribute('y'));
+            y -= this.parameters['wall-speed'];
+            t.setAttribute('y', y);
+            t.style.transform = `translate3d(0, ${y}px, 0)`;
+        }
+    }
 }
-
 
 window.app = new BaseApp(new WallLayout());
