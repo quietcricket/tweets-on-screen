@@ -16,12 +16,94 @@ class WallRenderer extends BaseRenderer {
     }
 }
 
+class Parameter {
+    // Add a prefix for local storage key to avoid conflicts
+    static PREFIX = 'tc-wall-';
+    /**
+     Most of the time it needs to be converted into Int or Float
+     e.g. parseInt, parseFloat
+     If no conversion is needed, return the value from localStorage or
+     input as String
+    */
+    constructor(key, conversion = x => x) {
+        let v = localStorage.getItem(Parameter.PREFIX + key);
+        let f = document.querySelector('.parameters #' + key)
+        f.addEventListener('change', evt => this.changed(evt));
+        if (v) {
+            f.value = v;
+        } else {
+            v = f.value;
+        }
+        this.value = conversion(v);
+        this.key = key;
+        this.conversion = conversion;
+
+    }
+
+    changed(evt) {
+        let v = evt.currentTarget.value;
+        localStorage.setItem(Parameter.PREFIX + this.key, v);
+        this.value = this.conversion(v);
+    }
+}
+
+
+class WallColumn {
+    constructor(n, width, margin) {
+        this.col = n;
+        this.width = width;
+        this.margin = margin;
+        this.elements = [];
+        this.ys = [];
+        this.x = this.col * width + this.margin * this.col;
+    }
+
+    add(ele) {
+        this.elements.push(ele);
+        this.ys.push(window.innerHeight);
+    }
+
+    update(speed) {
+        for (let i = 0; i < this.elements.length; i++) {
+            let ele = this.elements[i];
+            this.ys[i] -= speed;
+            ele.style.transform = `translate(${this.x}px,${this.ys[i]}px)`;
+
+            if (this.ys[i] < -ele.offsetHeight - this.margin * 2) {
+                this.ys.shift();
+                this.elements.shift();
+                ele.parentNode.removeChild(ele);
+            }
+
+            if (i == this.elements.length - 1) {
+                return this.ys[i] < window.innerHeight - ele.offsetHeight - this.margin;
+            }
+        }
+
+    }
+}
+
 class WallLayout extends BaseLayout {
+
+    get cols() {
+        return this.parameters['cols'].value;
+    }
+
+    get width() {
+        return this.parameters['width'].value;
+    }
+
+    get speed() {
+        return this.parameters['speed'].value;
+    }
+
     constructor() {
         super(new WallRenderer());
-        this.parameters = { 'wall-cols': 3, 'wall-col-width': 400, 'wall-speed': 5 };
+        this.parameters = {};
+        this.columns = [];
         this.index = 0;
-        this.margin = 15;
+        this.MARGIN = 15;
+        // Monitor key press of 'p' to show the parameters panel
         document.body.addEventListener('keydown', evt => {
             if (evt.key == 'p' || evt.key == 'P') {
                 let p = document.querySelector('.parameters');
@@ -29,61 +111,57 @@ class WallLayout extends BaseLayout {
             }
         });
 
-        for (let k in this.parameters) {
-            let v = localStorage.getItem(k);
-            let ele = document.getElementById(k);
-            ele.value = v ? v : this.parameters[k];
-            this.parameters[k] = parseFloat(ele.value);
-            ele.addEventListener('change', this.updateParameter);
-        }
+        document.getElementById('save-btn').addEventListener('click', evt => {
+            this.reset();
+            document.querySelector('.parameters').style.display = 'none';
 
-        this.colHeights = [];
-        for (var i = 0; i < this.parameters['wall-cols']; i++) {
-            this.colHeights.push(0);
-        }
-        this.tick();
-        let cols = this.parameters['wall-cols'];
-        let w = this.parameters['wall-col-width'];
-        document.getElementById('dynamic-styles').innerHTML = `
-        .tweets-wall{
-            left:${(window.innerWidth-this.margin*(cols-1)-w*cols)/2}px;
-            width:${this.margin*(cols-1)+w*cols}px;
-        }
-        .tweet{
-            width:${w}px;
-        }`;
+        });
+
+        // Initialize parameters and sycronize with save values
+        this.parameters['cols'] = new Parameter('cols', parseInt);
+        this.parameters['width'] = new Parameter('width', parseInt);
+        this.parameters['speed'] = new Parameter('speed', parseInt);
+
         this.wall = document.querySelector('.tweets-wall');
+        this.reset();
+        this.tick();
     }
 
-    updateParameter(evt) {
-        localStorage.setItem(evt.currentTarget.id, evt.currentTarget.value);
+    reset() {
+        if (!this.ready) {
+            return setTimeout(() => this.reset(), 100);
+        }
+        this.index = 0;
+        // Update stylesheets based on the parameters
+        document.getElementById('dynamic-styles').innerHTML = `
+                    .tweets-wall {
+                        left: ${(window.innerWidth - this.MARGIN * (this.cols - 1) - this.width * this.cols) / 2 }px;
+                        width: ${this.MARGIN * (this.cols - 1) + this.width * this.cols}px;
+                    }
+                    .tweet { width: ${this.width}px; } `;
+        this.wall.innerHTML = '';
+        this.columns = [];
+        for (let i = 0; i < this.cols; i++) {
+            this.columns[i] = new WallColumn(i, this.width, this.MARGIN);
+            this.appendColumn(this.columns[i]);
+        }
     }
 
     tick() {
         window.requestAnimationFrame(t => this.tick());
-        if (this.container.childElementCount == 0) {
-            return;
-        }
-        if (this.wall.childElementCount == 0) {
-            let cols = this.parameters['wall-cols'];
-            let ys = Array(cols).fill(0);
-
-            for (var i = 0; i < this.container.childElementCount; i++) {
-                let col = i % cols;
-                let cc = this.container.childNodes[i].cloneNode(true);
-                cc.setAttribute('y', window.innerHeight);
-                cc.style.left = this.parameters['wall-col-width'] * col + this.margin * (col - 1) + 'px';
-                cc.style.top = ys[col] + 'px';
-                this.wall.appendChild(cc);
-                ys[col] += cc.offsetHeight + this.margin;
+        for (let c of this.columns) {
+            if (c.update(this.speed)) {
+                this.appendColumn(c);
             }
         }
-        for (let t of this.wall.childNodes) {
-            let y = parseInt(t.getAttribute('y'));
-            y -= this.parameters['wall-speed'];
-            t.setAttribute('y', y);
-            t.style.transform = `translate3d(0, ${y}px, 0)`;
-        }
+    }
+
+    appendColumn(c) {
+        let ele = this.container.childNodes[this.index].cloneNode(true);
+        ele.style.transform = `translate(${window.innerWidth/2}px, 3000px)`;
+        this.wall.appendChild(ele);
+        c.add(ele);
+        this.index = (this.index + 1) % this.container.childElementCount;
     }
 }
 

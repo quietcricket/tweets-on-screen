@@ -55,6 +55,7 @@ class BaseApp {
                 this.layout.removeEntry(eid);
             }
         }
+        this.layout.ready = true;
     }
 
     _getParam(key, fallback = undefined) {
@@ -173,6 +174,8 @@ class BaseRenderer {
 
 class BaseLayout {
     constructor(renderer = new BaseRenderer(), containerSelector = '.tweets-container') {
+        // when the db is synced, all entries added, change ready to true
+        this.ready = false;
         this.container = document.querySelector(containerSelector);
         this.renderer = renderer;
     }
