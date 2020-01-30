@@ -121,10 +121,20 @@ class WallLayout extends BaseLayout {
         this.parameters['cols'] = new Parameter('cols', parseInt);
         this.parameters['width'] = new Parameter('width', parseInt);
         this.parameters['speed'] = new Parameter('speed', parseInt);
-
         this.wall = document.querySelector('.tweets-wall');
         this.reset();
         this.tick();
+    }
+
+    addEntry(entry) {
+        let ele = this.renderer.render(entry);
+        // Insert right after the current index so it shows up quickly
+        if (this.ready) {
+            this.container.insertBefore(ele, this.container.childNodes[this.index]);
+        } else {
+            this.container.prepend(ele);
+        }
+        return ele;
     }
 
     reset() {
@@ -143,7 +153,7 @@ class WallLayout extends BaseLayout {
         this.columns = [];
         for (let i = 0; i < this.cols; i++) {
             this.columns[i] = new WallColumn(i, this.width, this.MARGIN);
-            this.appendColumn(this.columns[i]);
+            this.growColumn(this.columns[i]);
         }
     }
 
@@ -151,12 +161,12 @@ class WallLayout extends BaseLayout {
         window.requestAnimationFrame(t => this.tick());
         for (let c of this.columns) {
             if (c.update(this.speed)) {
-                this.appendColumn(c);
+                this.growColumn(c);
             }
         }
     }
 
-    appendColumn(c) {
+    growColumn(c) {
         let ele = this.container.childNodes[this.index].cloneNode(true);
         ele.style.transform = `translate(${window.innerWidth/2}px, 3000px)`;
         this.wall.appendChild(ele);
