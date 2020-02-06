@@ -85,6 +85,9 @@ class WallColumn {
 
 class WallLayout extends BaseLayout {
 
+    /**
+     * Some getters as shortcut to the parameters
+     */
     get cols() {
         return this.parameters['cols'].value;
     }
@@ -111,6 +114,7 @@ class WallLayout extends BaseLayout {
             }
         });
 
+        // Attache action to save button, to relayout the page based on the updated parameters
         document.getElementById('save-btn').addEventListener('click', evt => {
             this.reset();
             document.querySelector('.parameters').style.display = 'none';
@@ -121,11 +125,18 @@ class WallLayout extends BaseLayout {
         this.parameters['cols'] = new Parameter('cols', parseInt);
         this.parameters['width'] = new Parameter('width', parseInt);
         this.parameters['speed'] = new Parameter('speed', parseInt);
+        
         this.wall = document.querySelector('.tweets-wall');
+
         this.reset();
         this.tick();
     }
 
+    /**
+     * Overrite the default addEntry logic
+     * Insert the new entry right after the current index so it shows up quickly
+     * This does not the change how entries are inserted in initialization phase
+     */ 
     addEntry(entry) {
         let ele = this.renderer.render(entry);
         // Insert right after the current index so it shows up quickly
@@ -137,6 +148,7 @@ class WallLayout extends BaseLayout {
         return ele;
     }
 
+    
     reset() {
         if (!this.ready) {
             return setTimeout(() => this.reset(), 100);

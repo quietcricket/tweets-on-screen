@@ -162,9 +162,12 @@ class BaseRenderer {
         if (!extended_entities || !extended_entities.media) return null;
         for (let m of extended_entities.media) {
             if (m.id_str == media_id && m.video_info) {
-                return m.video_info.variants[0].url
+                for (let v of m.video_info.variants) {
+                    if (v.content_type == 'video/mp4') return v.url;
+                }
             }
         }
+        return null;
     }
 
     formatDate(date) {
