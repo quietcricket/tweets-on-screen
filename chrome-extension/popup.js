@@ -14,6 +14,7 @@ function login() {
     chrome.runtime.sendMessage(message, resp => {
         if (resp == 'ok') {
             alert('Login successfully.');
+            window.close();
         } else {
             alert(resp);
         }
@@ -28,6 +29,7 @@ function logout() {
 
     document.querySelector('.logtout').classList.add('d-none');
     document.querySelector('.login').classList.remove('d-none');
+    window.close();
 }
 
 chrome.storage.local.get(['project', 'email'], resp => {

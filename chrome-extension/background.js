@@ -55,7 +55,6 @@ async function login(callback, data) {
         initDb();
         callback('ok');
     } catch (error) {
-
         if (error.message[0] == '{') error = JSON.parse(error.message).error;
         callback(error.message);
     }
@@ -64,7 +63,7 @@ async function login(callback, data) {
 
 function logout() {
     chrome.storage.local.clear();
-    app.auth().logout();
+    app.auth().signOut();
 }
 
 chrome.runtime.onMessage.addListener((msg, _, callback) => {

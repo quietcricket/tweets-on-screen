@@ -1,7 +1,7 @@
 img.emoji {
     height: 1.1em;
-    margin:0 0.2em;
-    vertical-align:baseline;
+    margin: 0 0.2em;
+    vertical-align: baseline;
 }
 
 .tweet {
@@ -22,13 +22,16 @@ img.emoji {
     height: 1rem;
     margin-right: 0.2rem;
 }
-.name{
+
+.name {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
 }
-.name h6, .name h5 {
-    margin:0;
+
+.name h6,
+.name h5 {
+    margin: 0;
 }
 
 .name h5 {
@@ -43,9 +46,9 @@ img.emoji {
 }
 
 .tweet-header img.profile {
-    border-radius:1000px; 
-    width: 3em;
-    height:3em;
+    border-radius: 1000px;
+    width: 3rem;
+    height: 3rem;
     margin-right: 0.5em;
 }
 

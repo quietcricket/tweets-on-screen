@@ -1,70 +1,71 @@
 <!doctype html>
 
 <head>
-	<style type="text/css">
-		* {
-			box-sizing: border-box;
-		}
+    <style type="text/css">
+    * {
+        box-sizing: border-box;
+    }
 
-		.container {
-			width: 300px;
-			padding: 15px;
-		}
+    .container {
+        width: 300px;
+        padding: 15px;
+    }
 
-		button {
-			cursor: pointer;
-			display: block;
-			padding: 5px 20px;
-			border: none;
-			border-radius: 3px;
-			color: #fff;
-			background-color: #5D9BDA;
-			-webkit-transition: 0.5s;
-			transition: 0.5s;
-			margin: 0 auto;
-		}
+    button {
+        cursor: pointer;
+        display: block;
+        padding: 5px 20px;
+        border: none;
+        border-radius: 3px;
+        color: #fff;
+        background-color: #5D9BDA;
+        -webkit-transition: 0.5s;
+        transition: 0.5s;
+        margin: 0 auto;
+    }
 
-		button:hover span {
-			-webkit-transform: translateX(30px);
-			transform: translateX(30px);
-		}
+    button:hover span {
+        -webkit-transform: translateX(30px);
+        transform: translateX(30px);
+    }
 
-		h3 {
-			text-align: center;
-			font-weight: bolder;
-			margin: 0 0 15px 0;
-			color: #5D9BDA;
-		}
+    h3 {
+        text-align: center;
+        font-weight: bolder;
+        margin: 0 0 15px 0;
+        color: #5D9BDA;
+    }
 
-		.d-none {
-			display: none;
-		}
+    .d-none {
+        display: none;
+    }
 
-		input {
-			width: 100%;
-			margin-bottom: 5px;
-		}
-	</style>
+    input {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    </style>
 </head>
 
 <body>
-	<div class="container">
-		<div class="login d-none">
-			<h3>Login</h3>
-			<input type="email" id="email" placeholder="Email" />
-			<input type="password" id="password" placeholder="Password" />
-			<input type="text" id="project" placeholder="Project ID" />
-			<input type="text" id="api-key" placeholder="API Key" />
-			<button id="login-btn"><span>Login</span></button>
-		</div>
-		<div class="logout d-none">
-			<h3>Logout</h3>
-			<p class="status"></p>
-			<button id="logout-btn"><span>Logout</span></button>
-		</div>
-	</div>
-	<script src="/popup.js">
-	</script>
+    <div class="container">
+        <div class="login d-none">
+            <h3>Login</h3>
+            <input type="email" id="email" placeholder="Email" />
+            <input type="password" id="password" placeholder="Password" />
+            <input type="text" id="project" placeholder="Project ID" value="dooh-on-fire" />
+            <input type="text" id="api-key" placeholder="API Key" value="AIzaSyC2B4NS0wJY80w3FB9QV7CDJY5NdLidBhI" />
+            <button id="login-btn"><span>Login</span></button>
+        </div>
+        <div class="logout d-none">
+            <h3>Logout</h3>
+            <p class="status"></p>
+            <button id="logout-btn"><span>Logout</span></button>
+        </div>
+    </div>
+    <script src="/popup.js">
+    </script>
 </body>
 
 </html>
