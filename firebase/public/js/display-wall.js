@@ -104,7 +104,7 @@ class WallLayout extends BaseLayout {
         super(new WallRenderer());
         this.parameters = {};
         this.columns = [];
-        this.index = 0;
+        this.index = -1;
         this.MARGIN = 15;
         // Monitor key press of 'p' to show the parameters panel
         document.body.addEventListener('keydown', evt => {
@@ -125,7 +125,7 @@ class WallLayout extends BaseLayout {
         this.parameters['cols'] = new Parameter('cols', parseInt);
         this.parameters['width'] = new Parameter('width', parseInt);
         this.parameters['speed'] = new Parameter('speed', parseInt);
-        
+
         this.wall = document.querySelector('.tweets-wall');
 
         this.reset();
@@ -136,7 +136,7 @@ class WallLayout extends BaseLayout {
      * Overrite the default addEntry logic
      * Insert the new entry right after the current index so it shows up quickly
      * This does not the change how entries are inserted in initialization phase
-     */ 
+     */
     addEntry(entry) {
         let ele = this.renderer.render(entry);
         // Insert right after the current index so it shows up quickly
@@ -148,12 +148,12 @@ class WallLayout extends BaseLayout {
         return ele;
     }
 
-    
+
     reset() {
         if (!this.ready) {
             return setTimeout(() => this.reset(), 100);
         }
-        this.index = 0;
+        this.index = -1;
         // Update stylesheets based on the parameters
         document.getElementById('dynamic-styles').innerHTML = `
                     .tweets-wall {
@@ -179,11 +179,11 @@ class WallLayout extends BaseLayout {
     }
 
     growColumn(c) {
+        this.index = (this.index + 1) % this.container.childElementCount;
         let ele = this.container.childNodes[this.index].cloneNode(true);
         ele.style.transform = `translate(${window.innerWidth/2}px, 3000px)`;
         this.wall.appendChild(ele);
         c.add(ele);
-        this.index = (this.index + 1) % this.container.childElementCount;
     }
 }
 
