@@ -4,68 +4,6 @@ const STATUS_REJECTED = 'rejected';
 const STATUS_LIST = [STATUS_PENDING, STATUS_APPROVED, STATUS_REJECTED];
 
 /**
- * Base Application
- * In charge of DB related logic
- * Call renderer and layout with data
- */
-class BaseApp {
-    constructor(layout) {
-        this.layout = layout;
-        this.db = firebase.firestore();
-        this.db.enablePersistence({
-            synchronizeTabs: true
-        });
-        this.db.collection('entry').onSnapshot(snapshot => this.entriesChanged(snapshot));
-        this.allEntries = {};
-        this.groups = {};
-        STATUS_LIST.map(k => this.groups[k] = []);
-
-        this.filter = STATUS_APPROVED;
-    }
-
-    get currentIds() {
-        return this.groups[this.filter];
-    }
-
-    /**
-     * Monitors database changes
-     * Calls the layout manager to add and remove dom elements
-     */
-    entriesChanged(snap) {
-        let filteredIds = this.currentIds.slice();
-        STATUS_LIST.map(k => this.groups[k] = []);
-        this.allEntries = {};
-        let ids = [];
-        for (let doc of snap.docs) {
-            let entry = doc.data();
-            this.allEntries[entry.id_str + ""] = entry;
-            this.groups[entry.status].push(entry.id_str);
-            if (entry.status == this.filter) {
-                ids.push(entry.id_str);
-                // Add entry if it is newly added
-                if (!filteredIds.includes(entry.id_str)) {
-                    this.layout.addEntry(entry);
-                }
-            }
-        }
-
-        for (let eid of filteredIds) {
-            // Remove entry if it is removed
-            if (!ids.includes(eid)) {
-                this.layout.removeEntry(eid);
-            }
-        }
-        this.layout.ready = true;
-    }
-
-    _getParam(key, fallback = undefined) {
-        var v = new URLSearchParams(document.location.search).get(key);
-        return v ? v : fallback
-    }
-
-}
-
-/**
  * Renders a tweet as a dom element
  */
 class BaseRenderer {
@@ -202,6 +140,69 @@ class BaseLayout {
     _getElement(eid) {
         return document.querySelector(`[eid="${eid}"]`)
     }
+}
+
+
+/**
+ * Base Application
+ * In charge of DB related logic
+ * Call renderer and layout with data
+ */
+class BaseApp {
+    constructor(layout) {
+        this.layout = layout;
+        this.db = firebase.firestore();
+        this.db.enablePersistence({
+            synchronizeTabs: true
+        });
+        this.db.collection('entry').onSnapshot(snapshot => this.entriesChanged(snapshot));
+        this.allEntries = {};
+        this.groups = {};
+        STATUS_LIST.map(k => this.groups[k] = []);
+
+        this.filter = STATUS_APPROVED;
+    }
+
+    get currentIds() {
+        return this.groups[this.filter];
+    }
+
+    /**
+     * Monitors database changes
+     * Calls the layout manager to add and remove dom elements
+     */
+    entriesChanged(snap) {
+        let filteredIds = this.currentIds.slice();
+        STATUS_LIST.map(k => this.groups[k] = []);
+        this.allEntries = {};
+        let ids = [];
+        for (let doc of snap.docs) {
+            let entry = doc.data();
+            this.allEntries[entry.id_str + ""] = entry;
+            this.groups[entry.status].push(entry.id_str);
+            if (entry.status == this.filter) {
+                ids.push(entry.id_str);
+                // Add entry if it is newly added
+                if (!filteredIds.includes(entry.id_str)) {
+                    this.layout.addEntry(entry);
+                }
+            }
+        }
+
+        for (let eid of filteredIds) {
+            // Remove entry if it is removed
+            if (!ids.includes(eid)) {
+                this.layout.removeEntry(eid);
+            }
+        }
+        this.layout.ready = true;
+    }
+
+    _getParam(key, fallback = undefined) {
+        var v = new URLSearchParams(document.location.search).get(key);
+        return v ? v : fallback
+    }
+
 }
 
 export {

@@ -16,73 +16,6 @@ class WallRenderer extends BaseRenderer {
     }
 }
 
-class Parameter {
-    // Add a prefix for local storage key to avoid conflicts
-    static PREFIX = 'tc-wall-';
-    /**
-     Most of the time it needs to be converted into Int or Float
-     e.g. parseInt, parseFloat
-     If no conversion is needed, return the value from localStorage or
-     input as String
-    */
-    constructor(key, conversion = x => x) {
-        let v = localStorage.getItem(Parameter.PREFIX + key);
-        let f = document.querySelector('.parameters #' + key)
-        f.addEventListener('change', evt => this.changed(evt));
-        if (v) {
-            f.value = v;
-        } else {
-            v = f.value;
-        }
-        this.value = conversion(v);
-        this.key = key;
-        this.conversion = conversion;
-
-    }
-
-    changed(evt) {
-        let v = evt.currentTarget.value;
-        localStorage.setItem(Parameter.PREFIX + this.key, v);
-        this.value = this.conversion(v);
-    }
-}
-
-
-class WallColumn {
-    constructor(n, width, margin) {
-        this.col = n;
-        this.width = width;
-        this.margin = margin;
-        this.elements = [];
-        this.ys = [];
-        this.x = this.col * width + this.margin * this.col;
-    }
-
-    add(ele) {
-        this.elements.push(ele);
-        this.ys.push(window.innerHeight);
-    }
-
-    update(speed) {
-        for (let i = 0; i < this.elements.length; i++) {
-            let ele = this.elements[i];
-            this.ys[i] -= speed;
-            ele.style.transform = `translate(${this.x}px,${this.ys[i]}px)`;
-
-            if (this.ys[i] < -ele.offsetHeight - this.margin * 2) {
-                this.ys.shift();
-                this.elements.shift();
-                ele.parentNode.removeChild(ele);
-            }
-
-            if (i == this.elements.length - 1) {
-                return this.ys[i] < window.innerHeight - ele.offsetHeight - this.margin;
-            }
-        }
-
-    }
-}
-
 class WallLayout extends BaseLayout {
 
     /**
@@ -187,4 +120,70 @@ class WallLayout extends BaseLayout {
     }
 }
 
+class Parameter {
+    // Add a prefix for local storage key to avoid conflicts
+    static PREFIX = 'tc-wall-';
+    /**
+     Most of the time it needs to be converted into Int or Float
+     e.g. parseInt, parseFloat
+     If no conversion is needed, return the value from localStorage or
+     input as String
+    */
+    constructor(key, conversion = x => x) {
+        let v = localStorage.getItem(Parameter.PREFIX + key);
+        let f = document.querySelector('.parameters #' + key)
+        f.addEventListener('change', evt => this.changed(evt));
+        if (v) {
+            f.value = v;
+        } else {
+            v = f.value;
+        }
+        this.value = conversion(v);
+        this.key = key;
+        this.conversion = conversion;
+
+    }
+
+    changed(evt) {
+        let v = evt.currentTarget.value;
+        localStorage.setItem(Parameter.PREFIX + this.key, v);
+        this.value = this.conversion(v);
+    }
+}
+
+
+class WallColumn {
+    constructor(n, width, margin) {
+        this.col = n;
+        this.width = width;
+        this.margin = margin;
+        this.elements = [];
+        this.ys = [];
+        this.x = this.col * width + this.margin * this.col;
+    }
+
+    add(ele) {
+        this.elements.push(ele);
+        this.ys.push(window.innerHeight);
+    }
+
+    update(speed) {
+        for (let i = 0; i < this.elements.length; i++) {
+            let ele = this.elements[i];
+            this.ys[i] -= speed;
+            ele.style.transform = `translate(${this.x}px,${this.ys[i]}px)`;
+
+            if (this.ys[i] < -ele.offsetHeight - this.margin * 2) {
+                this.ys.shift();
+                this.elements.shift();
+                ele.parentNode.removeChild(ele);
+            }
+
+            if (i == this.elements.length - 1) {
+                return this.ys[i] < window.innerHeight - ele.offsetHeight - this.margin;
+            }
+        }
+
+    }
+}
 window.app = new BaseApp(new WallLayout());
