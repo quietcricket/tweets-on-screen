@@ -66,4 +66,5 @@ node_modules/
 
 .firebaserc
 
-public/*.zip
+public/*-extension.zip
+public/docs/index.html

@@ -122,7 +122,6 @@ class WallLayout extends BaseLayout {
 
 class Parameter {
     // Add a prefix for local storage key to avoid conflicts
-    static PREFIX = 'tc-wall-';
     /**
      Most of the time it needs to be converted into Int or Float
      e.g. parseInt, parseFloat
@@ -130,7 +129,9 @@ class Parameter {
      input as String
     */
     constructor(key, conversion = x => x) {
-        let v = localStorage.getItem(Parameter.PREFIX + key);
+        this.PREFIX = 'tc-wall-';
+
+        let v = localStorage.getItem(this.PREFIX + key);
         let f = document.querySelector('.parameters #' + key)
         f.addEventListener('change', evt => this.changed(evt));
         if (v) {
@@ -146,7 +147,7 @@ class Parameter {
 
     changed(evt) {
         let v = evt.currentTarget.value;
-        localStorage.setItem(Parameter.PREFIX + this.key, v);
+        localStorage.setItem(this.PREFIX + this.key, v);
         this.value = this.conversion(v);
     }
 }

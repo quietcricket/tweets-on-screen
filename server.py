@@ -2,7 +2,7 @@ import json
 from livereload import Server
 from tornado.web import RedirectHandler, StaticFileHandler
 
-settings = json.load(open('.firebaserc'))
+settings = json.load(open('firebase/.firebaserc'))
 server_url = 'https://%s.web.app/__/' % settings['projects']['default']
 
 
@@ -22,7 +22,7 @@ class FirebaseServer(Server):
 
 
 server = FirebaseServer()
-server.watch('public/*')
-server.watch('public/css/*')
-server.watch('public/js/*')
-server.serve(8000, root='public')
+server.watch('firebase/public/*')
+server.watch('firebase/public/css/*')
+server.watch('firebase/public/js/*')
+server.serve(8000, root='firebase/public')

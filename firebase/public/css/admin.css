@@ -31,8 +31,10 @@ body.rejected .btn-reject {
 
 .tweet {
     width: 300px;
+    background-color: white;
 }
 .tweet-header img.profile{
     width:45px;
     height:45px;
+    object-fit: cover;
 }
