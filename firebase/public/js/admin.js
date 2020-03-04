@@ -27,10 +27,11 @@ class AdminRenderer extends BaseRenderer {
 
 class AdminLayout extends BaseLayout {
     constructor() {
-        super(new AdminRenderer());
-        this.filter=STATUS_PENDING;
+        super(new AdminRenderer({ "12月6日はロマサガRS1周年": "Romasaga_rs_2019_Emoji/Romasaga_rs_2019_Emoji.png" }));
+        this.filter = STATUS_PENDING;
         this.masonryHeight = 0;
         this.masonry = new Masonry(this.container, {
+            transitionDuration: 0,
             gutter: 20,
             stagger: 30
         });
@@ -157,7 +158,7 @@ class AdminApp extends BaseApp {
     }
 }
 
-firebase.auth().onAuthStateChanged(function (user) {
+firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         window.app = new AdminApp();
     } else {

@@ -15,14 +15,21 @@
     <script defer src="/__/firebase/init.js"></script>
     <link rel="stylesheet" href="/css/tweet.css">
     <style>
-        
     html {
         overflow: hidden;
+        background-image: url(img/bg.jpg);
+        background-size: cover;
+        /* height: 100vh; */
+    }
+
+    body {
+        background-color: transparent;
     }
 
     .tweet {
         padding: 1em;
         width: 400px;
+        background-color: white;
     }
 
     .tweet-body {
@@ -51,26 +58,44 @@
         z-index: 999;
     }
 
-    .tweets-wall {
-        position: relative;
-    }
-
     .tweets-container {
         position: absolute;
         left: 9000px;
+        display: none;
     }
 
     .tweets-wall .tweet {
         position: absolute;
-        left: 0;
-        top: 0;
-        transition: 0.02s all;
     }
 
     .tweets-wall .tweet img {
         max-height: 60vh;
         object-fit: cover;
         object-position: center center;
+    }
+
+    .parameters-prompt {
+        position: relative;
+        top: 20px;
+        background-color: darkorange;
+        padding: 10px;
+        width: 220px;
+        font-size: 14px;
+        margin: 0 auto;
+        text-align: center;
+        color: white;
+        border-radius: 14px;
+        animation: fadeout 1s ease-in 1s 1 normal forwards;
+    }
+
+    @keyframes fadeout {
+        from {
+            opacity: 1;
+        }
+
+        to {
+            opacity: 0;
+        }
     }
 
     </style>
@@ -92,11 +117,12 @@
 
         <div class="form-group">
             <label>Speed</label>
-            <input type="number" id="speed" value="2" class="form-control form-control-sm" />
+            <input type="number" id="speed" value="1" class="form-control form-control-sm" />
         </div>
 
         <button id="save-btn" class="btn btn-primary btn-sm">Save</button>
     </div>
+    <div class="parameters-prompt">Press 'p' to toggle the settings</div>
     <div class="tweets-container"></div>
     <div class="tweets-wall"></div>
     <script type="module" src="/js/display-wall.js"> </script>

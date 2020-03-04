@@ -5,46 +5,47 @@ var moderationStatus = {};
  * content.js is sandboxed and cannot access certain information from the page
  * injection is much better
  */
-// var ele = document.createElement('link');
-// ele.rel = "stylesheet";
-// ele.href = chrome.extension.getURL('injection.css');
-// document.head.append(ele);
 
-var ele = document.createElement('script');
+let ele = document.createElement('script');
 ele.src = chrome.extension.getURL('injection.js')
 document.body.append(ele);
 /**
  * Add a "shortlist this" button to all tweets
  */
-
 function addButtons() {
-    for (var ele of document.querySelectorAll('[dooh]')) {
-        if (ele.hasAttribute('dooh-btn')) continue;
+    for (let ele of document.querySelectorAll('article')) {
+        // Add a marker to skip those already processed
+        if (ele.hasAttribute('tos-processed')) continue;
+        ele.setAttribute('tos-processed', 1);
+        // There is an <a> link for the time element
+        // Seems to be the most reliable way to find the tweet-id
+        let timeEle = ele.querySelector('time');
+        if (!timeEle) continue;
+        // Using regular expression to strip off none digital characters
+        // So far never seen any none digital chars, but just to be safe
+        let tid = timeEle.parentNode.getAttribute('href').split('/').pop().replace(/\D+/g, '');
+
+        // Creates the button
         var btn = document.createElement('button');
-        var tid = ele.getAttribute('dooh');
-
         var status = moderationStatus[tid];
-        if (status) {
-            btn.className = 'dooh-btn ' + status;
-        } else {
-            btn.className = 'dooh-btn normal';
-        }
-
-        ele.firstChild.firstChild.append(btn);
-        ele.setAttribute('dooh-btn', 1);
+        // Attach css class for different stage
+        btn.className = 'tos-btn ' + (status ? status : 'normal')
+        ele.append(btn);
         btn.setAttribute('tweet-id', tid);
         btn.addEventListener('click', function(e) {
             e.stopPropagation();
             if (!e.currentTarget.classList.contains('normal')) return;
-            e.currentTarget.className = "dooh-btn pending";
+            e.currentTarget.className = "tos-btn pending";
             addTweet(e.currentTarget.getAttribute('tweet-id'));
         });
     }
 
+    // Try to get the latest tweets data from the injection code
     var dataDiv = document.querySelector('#ajax-data');
     if (dataDiv && dataDiv.hasAttribute('dirty')) {
         dataDiv.removeAttribute('dirty');
         ajaxData = JSON.parse(decodeURIComponent(dataDiv.innerHTML));
+
         if (ajaxData.emoji_timestamp.length > 0) {
             chrome.runtime.sendMessage({
                 command: 'emoji',
@@ -53,7 +54,7 @@ function addButtons() {
             });
         }
     }
-    setTimeout(addButtons, 500);
+    setTimeout(addButtons, 200);
 }
 
 
@@ -81,7 +82,7 @@ function addTweet(tid) {
         data: data
     }, function(resp) {
         if (resp != 'ok') {
-            alert('An error occurred for tweet: ' + resp);
+            alert(`An error occurred for tweet: ${resp}.\n Please try to logout and login the extension again.`);
         }
         if (isRetweet) {
             alert("This is a retweet. Original tweet shortlisted.")
@@ -92,7 +93,6 @@ function addTweet(tid) {
 chrome.runtime.onMessage.addListener(function(msg, _, callback) {
     switch (msg.command) {
         case 'status':
-            console.log(msg);
             moderationStatus = msg.data;
             updateButtonStatus();
             break;
@@ -100,12 +100,12 @@ chrome.runtime.onMessage.addListener(function(msg, _, callback) {
 });
 
 function updateButtonStatus() {
-    for (var ele of document.querySelectorAll('.dooh-btn')) {
+    for (var ele of document.querySelectorAll('.tos-btn')) {
         var status = moderationStatus[ele.getAttribute('tweet-id')];
         if (status) {
-            ele.className = 'dooh-btn ' + status;
+            ele.className = 'tos-btn ' + status;
         } else {
-            ele.className = 'dooh-btn normal';
+            ele.className = 'tos-btn normal';
         }
     }
 }

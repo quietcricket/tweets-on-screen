@@ -26,9 +26,6 @@ function logout() {
     chrome.runtime.sendMessage({
         command: 'logout'
     });
-
-    document.querySelector('.logtout').classList.add('d-none');
-    document.querySelector('.login').classList.remove('d-none');
     window.close();
 }
 

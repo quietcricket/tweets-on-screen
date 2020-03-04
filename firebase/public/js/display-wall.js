@@ -36,7 +36,7 @@ class WallLayout extends BaseLayout {
     constructor() {
         super(new WallRenderer());
         this.parameters = {};
-        this.columns = [];
+        this.columnBottoms = [];
         this.index = -1;
         this.MARGIN = 15;
         // Monitor key press of 'p' to show the parameters panel
@@ -51,7 +51,6 @@ class WallLayout extends BaseLayout {
         document.getElementById('save-btn').addEventListener('click', evt => {
             this.reset();
             document.querySelector('.parameters').style.display = 'none';
-
         });
 
         // Initialize parameters and sycronize with save values
@@ -81,6 +80,11 @@ class WallLayout extends BaseLayout {
         return ele;
     }
 
+    removeEntry(eid) {
+        super.removeEntry(eid);
+        if (this.container.childElementCount == 0) this.reset();
+    }
+
 
     reset() {
         if (!this.ready) {
@@ -89,34 +93,44 @@ class WallLayout extends BaseLayout {
         this.index = -1;
         // Update stylesheets based on the parameters
         document.getElementById('dynamic-styles').innerHTML = `
-                    .tweets-wall {
-                        left: ${(window.innerWidth - this.MARGIN * (this.cols - 1) - this.width * this.cols) / 2 }px;
-                        width: ${this.MARGIN * (this.cols - 1) + this.width * this.cols}px;
-                    }
                     .tweet { width: ${this.width}px; } `;
         this.wall.innerHTML = '';
-        this.columns = [];
-        for (let i = 0; i < this.cols; i++) {
-            this.columns[i] = new WallColumn(i, this.width, this.MARGIN);
-            this.growColumn(this.columns[i]);
-        }
+        this.y = 0;
     }
 
     tick() {
         window.requestAnimationFrame(t => this.tick());
-        for (let c of this.columns) {
-            if (c.update(this.speed)) {
-                this.growColumn(c);
+        if (this.container.childElementCount == 0) return;
+        this.y += this.speed;
+        this.wall.style.transform = `translate(0, ${-this.y}px)`;
+        if (this.y % this.MARGIN != 0) return;
+        let bottoms = new Array(this.cols).fill(0);
+        for (let ele of this.wall.childNodes) {
+            let c = parseInt(ele.getAttribute('col'));
+            let h = ele.offsetHeight + this.MARGIN;
+            let top = parseInt(ele.getAttribute('top'));
+            bottoms[c] = h + top;
+            // Outside the visible area, remove it
+            if (this.y > top + h + this.MARGIN * 2) this.wall.removeChild(ele);
+        }
+
+        for (let i = 0; i < this.cols; i++) {
+            if (this.y > bottoms[i] - window.innerHeight) {
+                this.addToColumn(i, bottoms[i]);
+                break
             }
         }
     }
 
-    growColumn(c) {
+    addToColumn(columnIndex, top) {
         this.index = (this.index + 1) % this.container.childElementCount;
+        let ox = (window.innerWidth - this.cols * this.width - (this.cols - 1) * this.MARGIN) / 2;
         let ele = this.container.childNodes[this.index].cloneNode(true);
-        ele.style.transform = `translate(${window.innerWidth/2}px, 3000px)`;
+        ele.setAttribute('col', columnIndex);
+        ele.setAttribute('top', top);
+        ele.style.top = top + 'px';
+        ele.style.left = ox + columnIndex * (this.width + this.MARGIN) + 'px';
         this.wall.appendChild(ele);
-        c.add(ele);
     }
 }
 
@@ -129,7 +143,7 @@ class Parameter {
      input as String
     */
     constructor(key, conversion = x => x) {
-        this.PREFIX = 'tc-wall-';
+        this.PREFIX = 'tos-wall-';
 
         let v = localStorage.getItem(this.PREFIX + key);
         let f = document.querySelector('.parameters #' + key)
@@ -152,39 +166,4 @@ class Parameter {
     }
 }
 
-
-class WallColumn {
-    constructor(n, width, margin) {
-        this.col = n;
-        this.width = width;
-        this.margin = margin;
-        this.elements = [];
-        this.ys = [];
-        this.x = this.col * width + this.margin * this.col;
-    }
-
-    add(ele) {
-        this.elements.push(ele);
-        this.ys.push(window.innerHeight);
-    }
-
-    update(speed) {
-        for (let i = 0; i < this.elements.length; i++) {
-            let ele = this.elements[i];
-            this.ys[i] -= speed;
-            ele.style.transform = `translate(${this.x}px,${this.ys[i]}px)`;
-
-            if (this.ys[i] < -ele.offsetHeight - this.margin * 2) {
-                this.ys.shift();
-                this.elements.shift();
-                ele.parentNode.removeChild(ele);
-            }
-
-            if (i == this.elements.length - 1) {
-                return this.ys[i] < window.innerHeight - ele.offsetHeight - this.margin;
-            }
-        }
-
-    }
-}
 window.app = new BaseApp(new WallLayout());

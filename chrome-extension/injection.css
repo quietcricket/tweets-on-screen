@@ -1,45 +1,48 @@
-.dooh-btn {
+.tos-btn {
     color: white;
     border: none;
     background: #5D9BDA;
     font-family: system-ui;
-    padding: 5px 10px;
+    padding: 5px 5px 5px 15px;
     font-size: 14px;
     position: absolute;
+    width:120px;
     right: 0;
-    bottom: 10px;
-    width: 140px;
+    bottom: 7px;
+    transition-duration: 0.3s;
+    transition-property: background;
+    border-radius: 5em 0 0 5em;
 }
 
-.dooh-btn.normal:hover {
+.tos-btn.normal:hover {
     cursor: pointer;
-    color: #243649;
+    background: #87b5e3;
 }
 
-.dooh-btn.pending {
+.tos-btn.pending {
     background: #94958C;
 }
 
-.dooh-btn.rejected {
+.tos-btn.rejected {
     background: #B45355;
 }
 
-.dooh-btn.approved {
+.tos-btn.approved {
     background: #3CC861;
 }
 
-.dooh-btn::before {
+.tos-btn::before {
     content: "Shortlist This";
 }
 
-.dooh-btn.pending::before {
+.tos-btn.pending::before {
     content: "Pending";
 }
 
-.dooh-btn.rejected::before {
+.tos-btn.rejected::before {
     content: "Rejected";
 }
 
-.dooh-btn.approved::before {
+.tos-btn.approved::before {
     content: "Approved";
 }
