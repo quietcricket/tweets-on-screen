@@ -33,6 +33,10 @@ body.rejected .btn-reject {
     width: 300px;
     background-color: white;
 }
+.tweet-medias .media{
+    width: 100%;
+    max-width: 100%;
+}
 .tweet-header img.profile{
     width:45px;
     height:45px;

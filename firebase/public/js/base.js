@@ -94,10 +94,12 @@ class BaseRenderer {
         if (!entities || !entities.media) return '';
         for (let m of entities.media) {
             let video = this.expendVideo(extended_entities, m.id_str);
+            let w = m.original_info.width;
+            let h = m.original_info.height;
             if (video) {
-                return `<video class="media" src="${video}" loop autoplay muted width="100%"></video>`;
+                return `<video class="media" src="${video}" loop autoplay muted w="${w}" h="${h}"></video>`;
             } else {
-                return `<img class="media" src="${m.media_url_https}">`;
+                return `<img class="media" src="${m.media_url_https}" w="${w}" h="${h}">`;
             }
         }
 

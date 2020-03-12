@@ -56,7 +56,7 @@ class WallLayout extends BaseLayout {
         // Initialize parameters and sycronize with save values
         this.parameters['cols'] = new Parameter('cols', parseInt);
         this.parameters['width'] = new Parameter('width', parseInt);
-        this.parameters['speed'] = new Parameter('speed', parseInt);
+        this.parameters['speed'] = new Parameter('speed', parseFloat);
 
         this.wall = document.querySelector('.tweets-wall');
 
@@ -103,7 +103,7 @@ class WallLayout extends BaseLayout {
         if (this.container.childElementCount == 0) return;
         this.y += this.speed;
         this.wall.style.transform = `translate(0, ${-this.y}px)`;
-        if (this.y % this.MARGIN != 0) return;
+        if (Math.floor(this.y) % this.MARGIN != 0) return;
         let bottoms = new Array(this.cols).fill(0);
         for (let ele of this.wall.childNodes) {
             let c = parseInt(ele.getAttribute('col'));
@@ -131,6 +131,15 @@ class WallLayout extends BaseLayout {
         ele.style.top = top + 'px';
         ele.style.left = ox + columnIndex * (this.width + this.MARGIN) + 'px';
         this.wall.appendChild(ele);
+
+        let media = ele.querySelector('.media');
+        if (media) {
+            let w = ele.querySelector('.tweet-body').offsetWidth;
+            let h = w * parseFloat(media.getAttribute('h')) / parseFloat(media.getAttribute('w'))
+            media.setAttribute('width', w);
+            media.setAttribute('height', h);
+        }
+
     }
 }
 
