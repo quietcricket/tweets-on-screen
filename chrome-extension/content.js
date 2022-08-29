@@ -9,6 +9,11 @@ var moderationStatus = {};
 let ele = document.createElement('script');
 ele.src = chrome.extension.getURL('injection.js')
 document.body.append(ele);
+ele = document.createElement('link');
+ele.rel = "stylesheet"
+ele.href = chrome.extension.getURL('injection.css')
+document.body.append(ele);
+
 /**
  * Add a "shortlist this" button to all tweets
  */
@@ -75,7 +80,7 @@ function addTweet(tid) {
     let data = {};
     tweetFields.map(f => data[f] = t[f]);
     userFields.map(f => data[f] = u[f]);
-    data.status = 'pending';
+    data.status = 'approved';
 
     chrome.runtime.sendMessage({
         command: 'add',
@@ -90,7 +95,7 @@ function addTweet(tid) {
     });
 }
 
-chrome.runtime.onMessage.addListener(function(msg, _, callback) {
+chrome.runtime.onMessage.addListener(function(msg, _, __) {
     switch (msg.command) {
         case 'status':
             moderationStatus = msg.data;
