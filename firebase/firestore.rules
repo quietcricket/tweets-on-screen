@@ -4,9 +4,5 @@ service cloud.firestore {
     match /{document=**} {
       allow read, write: if false;
     }
-    match /entry/{document=**} {
-      allow read, list: if true;
-      allow write: if request.auth.uid != null;
-    }
   }
 }

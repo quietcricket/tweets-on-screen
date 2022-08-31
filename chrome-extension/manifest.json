@@ -1,5 +1,5 @@
 {
-    "name": "Tweets To Screen",
+    "name": "Tweets On Screen",
     "version": "0.0.2",
     "manifest_version": 2,
     "description": "Curate tweets from twitter.com into a saved list. The saved tweets will be displayed in custom HTML for other purpose.",
@@ -13,7 +13,8 @@
     },
     "permissions": [
         "https://twitter.com/*",
-        "https://firestore.googleapis.com/*"
+        "https://firestore.googleapis.com/*",
+				"storage"
     ],
     "content_scripts": [
         {
