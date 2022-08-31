@@ -1,24 +1,51 @@
 # #TOS - TweetsOnScreen
 
 ## The Problem
-Advertisers often want to present tweets in custom ways, customized designs, animations or even as prints or audio. Moderation is required to ensure the safety of the content. Most of the existing solutions in the market offer moderation and API for further implementation. However, they do not provide software development services to customize the presentation layer. Advertisers need to engage another software vendor who knows how to integrate with the API. Many advertisers gave up because there are too many parties involved. 
+Advertisers often want to present tweets in custom ways, customized designs, animations or even as prints or audio. Moderation is a must to ensure the safety of the content. Most of the existing solutions in the market are provided by "Social Listening" companies. However, they do not provide software development services to customize how the tweets are shown. Advertisers need to engage a software vendor to develop a custom website with the integration with the Social Listening solutions' API. Many advertisers gave up because there are too many parties involved. 
 
 ## The Solution
 #TOS aims to provide a turnkey solution for advertisers to curate and present tweets. It is an open source based solution for any agency partner to download, deploy and customize. Here's a [recorded video](https://photos.app.goo.gl/wTKfKtNNPwGyXneC9) of the solution. There are 3 components. 
 
 ### Curation (Chrome Extension)
 A Chrome extension is developed for the curators to shortlist tweets. The extension tweaks twitter.com by adding a "shortlist button" for each tweet. That button will send the tweet for final moderation, the approval panel.
+[Download Chrome Extension](https://tweets-on-screen.web.app/extension.zip)
+[How to install](https://webkul.com/blog/how-to-install-the-unpacked-extension-in-chrome/)
 
 ### Approval (Web)
 A web page is provided for advertisers to make a final decision which curated tweets should be featured. The 2 step (curate then approve) process is designed to tackle projects with high volume of content. Advertisers can engage multiple curators to look through more content. The process also reduces human errors.
 
-[Online Demo](https://tweets-on-screen.web.app)<br/>
+[Online Demo](https://tweets-on-screen.web.app)  
+Login email: demo@tos.com  
+Password:    demo123
 
 ### Presentation (Web and beyond)
 Most projects use HTML as output format. At the moment, the project includes 2 default layouts implemented in JavaScript and CSS. It also offers a JavaScript library to build further customizations. Because of its open source nature, presentation implementations will grow by community's contribution.
 
 [Online Demo: Display Wall](https://tweets-on-screen.web.app/display-wall.html)
-[Online Demo: Single Tweet](https://tweets-on-screen.web.app/display-single.html)
+[Online Demo: Display Single](https://tweets-on-screen.web.app/display-single.html)
+
+## Roles and Responsibilities
+* Server setup: 3rd party vendor engaged by Twitter
+* Display customization (Web development): 3rd party vendor engaged by Twitter 
+* Website design: 3rd party vendor engaged by Twitter
+* Curation: client or client's agency
+* Moderation: client or client's agency
+* OOH Media : client or client's agency
+
+## Production Timeline
+
+* Server setup: 2 days
+* Simple design and development (minor changes from an existing design): 3 days
+* Advanced design and development: 10 days
+* Training for curator and moderators: 1 day
+
+## Limitations
+
+* Only text and image tweets are supported for now: the assumptions is that tweets with original and authentic content are worth featuring. Retweet, tweets sharing a link and tweets with ads inside are not supported at the moment. 
+* Tweets with videos are not supported for now: browser doesn't allow auto playback of videos. It's a technical limitation hard to solve. Besides that, it may look rather messy to have tweets animated on a screen with yet another moving component inside the tweets.
+* Tweets with long or many images are not recommended to be featured. It's very challenging to design a layout that can display them nicely.
+
+
 
 ## Technical specifications
 #TOS uses JavaScript as the main programming language and Firebase for database, user authentication and hosting. There are also some python scripts to facilitate development but it is optional to use them.
@@ -121,18 +148,8 @@ There are 3 parts of the app.
       * `clear`: reset the display
 
 2. ### App
-
     * Responsible for database(firestore) related tasks
     * Monitors changes from the database and passes the changes to its layout manager
-
-## TODOs
-### Implement custom emojis (hashflags)
-* The full list from twitter.com is too large to be used
-* Needs a field to enter a map of hashtag and svg path, e.g. `{"oneteam": "OneTeam_V2Design_Evergreen.png"}`
-### Implement media caching
-* If a user deletes her/his tweet, the image/video will disappear
-* If a user deletes her/his account, the profile image wiil disappear
-* Write a Firebase `Function` to download these images and save them into `Storage`
 
 ## HOWTOs
 ### How to install Unpacked Chrome Extension
