@@ -6,7 +6,7 @@ var moderationStatus = {};
 
 let ele = document.createElement('link');
 ele.rel = "stylesheet"
-ele.href = chrome.extension.getURL('injection.css')
+ele.href = chrome.runtime.getURL('injection.css')
 document.body.append(ele);
 
 /**

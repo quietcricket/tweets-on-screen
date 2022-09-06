@@ -1,28 +1,29 @@
 {
-    "name": "Tweets On Screen",
+    "name": "#TOS - Tweets On Screen",
     "version": "0.0.2",
-    "manifest_version": 2,
+    "manifest_version": 3,
     "description": "Curate tweets from twitter.com into a saved list. The saved tweets will be displayed in custom HTML for other purpose.",
     "icons": {
         "16": "icons/icon16.png",
         "48": "icons/icon48.png",
         "128": "icons/icon128.png"
     },
-    "browser_action": {
-        "default_icon": "icons/icon128.png"
+    "action": {
+        "default_icon": {
+            "16": "icons/icon16.png",
+            "48": "icons/icon48.png",
+            "128": "icons/icon128.png"
+        },
+        "default_title": "#TOS",
+        "default_popup": "popup.html"
     },
     "permissions": [
-        "https://twitter.com/*",
-        "https://firestore.googleapis.com/*",
-				"storage"
+        "storage"
     ],
     "content_scripts": [
         {
             "matches": [
-                "https://twitter.com/search?*",
-                "https://twitter.com/hashtag/*",
-                "https://twitter.com/home",
-                "https://twitter.com/"
+                "https://twitter.com/*"
             ],
             "js": [
                 "content.js"
@@ -30,15 +31,17 @@
         }
     ],
     "background": {
-        "scripts": [
-            "firebase-app.js",
-            "firebase-auth.js",
-            "firebase-firestore.js",
-            "background.js"
-        ]
+        "service_worker": "background.js",
+        "type":"module"
     },
     "web_accessible_resources": [
-        "injection.js",
-        "injection.css"
+        {
+            "resources": [
+                "injection.css"
+            ],
+            "matches": [
+                "https://twitter.com/*"
+            ]
+        }
     ]
 }

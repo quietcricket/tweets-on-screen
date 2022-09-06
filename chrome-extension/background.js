@@ -1,3 +1,4 @@
+import { firebase } from './firebase-app.js'
 var db;
 var app;
 
